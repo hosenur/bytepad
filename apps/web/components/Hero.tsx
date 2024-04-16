@@ -34,10 +34,10 @@ export const Hero = () => {
         >
             <div className="relative z-10 flex flex-col items-center">
                 <h1 className="max-w-3xl bg-gradient-to-br from-white to-gray-400 bg-clip-text text-center text-3xl font-bold leading-tight text-transparent sm:text-5xl sm:leading-tight md:text-7xl md:leading-tight">
-                    Your Code Slate Awaits
+                    Your Byte Pad Awaits
                 </h1>
                 <p className="my-6 max-w-2xl text-center text-base leading-relaxed md:text-lg md:leading-relaxed">
-                    Slatehash is an online playground for developers. React, Next.js, Nuxt ? We got you covered. Start coding now. Choose from a plethora of templates and get started.
+                    Byte Pad is an online playground for developers. React, Next.js, Nuxt ? We got you covered. Start coding now. Choose from a plethora of templates and get started.
                 </p>
                 <motion.button
                     style={{
