@@ -1,9 +1,34 @@
-import express, { Application, Request, Response } from 'express';
-import playgroundRouter from "@/routes/playgroundRouter"
-const app: Application = express();
-const port = process.env.PORT || 4000;
-app.use(express.json());
-app.use("/playgrounds", playgroundRouter);
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+import express, { type Application } from "express";
+import cors from "cors";
+import helmet from "helmet";
+import morgan from "morgan";
+import { routes } from "@/routes";
+import { env } from "@/config";
+
+export const app: Application = express();
+app.use(
+    cors({
+        origin: "*",
+    })
+);
+app.use(
+    helmet({
+        contentSecurityPolicy: false,
+    })
+);
+app.use(morgan(env.isDev ? "dev" : "combined"));
+app.use(
+    express.json({
+        limit: "5mb",
+    })
+);
+app.use(routes);
+app.use("*", (_, res) => {
+    res.status(404).json({
+        message: "Not Found",
+    });
 });
+
+app.set("host", env.APP_HOST);
+app.set("port", env.APP_PORT);
+app.set("json spaces", 2);
