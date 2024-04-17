@@ -1,15 +1,14 @@
-"use client";
-import React, { useEffect } from "react";
 import {
+    animate,
+    motion,
     useMotionTemplate,
     useMotionValue,
-    motion,
-    animate,
 } from "framer-motion";
+import { useEffect } from "react";
 
 const COLORS_TOP = ["#13FFAA", "#1E67C6", "#CE84CF", "#DD335C"];
 
-export const Hero = () => {
+export const Landing = () => {
     const color = useMotionValue(COLORS_TOP[0]);
 
     useEffect(() => {
@@ -22,7 +21,6 @@ export const Hero = () => {
     }, []);
 
     const backgroundImage = useMotionTemplate`radial-gradient(125% 125% at 50% 0%, #020617 50%, ${color})`;
-    const border = useMotionTemplate`1px solid ${color}`;
     const boxShadow = useMotionTemplate`0px 4px 24px ${color}`;
 
     return (

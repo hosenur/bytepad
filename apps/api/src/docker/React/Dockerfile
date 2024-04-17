@@ -8,4 +8,5 @@ run corepack enable
 workdir /app
 run yarn create vite bytereact --template react-swc-ts
 workdir /app/bytereact
+run yarn
 expose 5173

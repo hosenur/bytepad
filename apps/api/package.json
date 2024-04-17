@@ -2,9 +2,13 @@
   "name": "api",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "src/app.ts",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
+    "db:generate": "cd src && npx prisma generate",
+    "db:push": "cd src && npx prisma db push",
+    "postinstall": "npm run db:generate",
     "start": "ts-node-dev --respawn --transpile-only src/app.ts",
     "build": "tsc && copyfiles -u package.json ./build"
   },
@@ -20,6 +24,8 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@clerk/clerk-sdk-node": "^4.13.14",
+    "@prisma/client": "^5.12.1",
     "@types/dockerode": "^3.3.28",
     "copyfiles": "^2.4.1",
     "dockerode": "^4.0.2"
