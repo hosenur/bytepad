@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { PlaygroundRoutes } from "./playground.routes";
-import { ClerkExpressWithAuth } from "@clerk/clerk-sdk-node";
+import { ClerkExpressRequireAuth } from "@clerk/clerk-sdk-node";
 const router: Router = Router();
-router.use("/playground", PlaygroundRoutes);
+router.use("/playgrounds", ClerkExpressRequireAuth({}), PlaygroundRoutes);
 
 export { router as routes };

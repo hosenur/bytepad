@@ -1,4 +1,5 @@
 const useURL = (slug: string) => {
-    const url = `https://api.example.com/${slug}`;
+    const url = `http://localhost:8080/${slug}`;
     return url;
 }
+export { useURL };

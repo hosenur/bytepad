@@ -34,6 +34,8 @@
     "express": "^4.19.2",
     "helmet": "^7.1.0",
     "morgan": "^1.10.0",
-    "resolve-tspaths": "^0.8.18"
+    "resolve-tspaths": "^0.8.18",
+    "socket.io": "^4.7.5",
+    "unique-names-generator": "^4.7.1"
   }
 }

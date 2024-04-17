@@ -21,7 +21,7 @@ app.use(
     express.json({
         limit: "5mb",
     })
-);
+);    
 app.use(routes);
 app.use("*", (_, res) => {
     res.status(404).json({

@@ -6,7 +6,7 @@ enum PlaygroundType {
 const getCommand = (type: PlaygroundType, port: number, name: string) => {
     switch (type) {
         case PlaygroundType.REACT:
-            return `docker run -p 5173:${port} -d --name ${name} bytereact`;
+            return `docker run -p 5173:${port} -dit --name ${name} bytereact`;
         case PlaygroundType.NEXT:
             return `npx create-next-app playground-${port}`;
         default:
@@ -14,7 +14,7 @@ const getCommand = (type: PlaygroundType, port: number, name: string) => {
     }
 }
 
-export const createPlayground = async (name: string, type: PlaygroundType, port: number) => {
+export const createContainer = async (name: string, type: PlaygroundType, port: number) => {
 
     const command = getCommand(type, port, name);
     exec(command, (error, stdout, stderr) => {

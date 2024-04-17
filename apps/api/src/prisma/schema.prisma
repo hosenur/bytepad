@@ -8,13 +8,37 @@ generator client {
   provider = "prisma-client-js"
 }
 
+//create a enum for the type of playground
 model Playground {
-  id        String   @id @default(cuid())
-  name      String
-  createdAt DateTime @default(now())
+  id               String             @id @default(cuid())
+  type             PlaygroundType
+  owner            String
+  createdAt        DateTime           @default(now())
+  PlaygroundMember PlaygroundMember[]
+}
+
+model PlaygroundMember {
+  id           String     @id @default(cuid())
+  playground   Playground @relation(fields: [playgroundId], references: [id])
+  playgroundId String
+  userId       String
+  role         Role
+  createdAt    DateTime   @default(now())
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+enum PlaygroundType {
+  REACT
+  NEXT_APP
+  NEXT_PAGE
+  VUE
+}
+
+enum Role {
+  OWNER
+  COLLABORATOR
 }
