@@ -1,15 +1,5 @@
-// import { usePlaygrounds } from "../hooks/usePlaygrounds"
-
-// export default function Playgrounds() {
-//   const { getMyPlaygrounds } = usePlaygrounds()
-//   const { data } = getMyPlaygrounds()
-//   console.log(data)
-//   return (
-//     <div>Playgrounds</div>
-//   )
-// }
-
 import {
+  Code,
   Home,
   LineChart,
   Menu,
@@ -32,6 +22,7 @@ import {
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { playgroundTypes } from "@/constants/Playgrounds"
 import { Link } from "react-router-dom"
+import MyPlaygrounds from "@/components/MyPlaygrounds"
 
 export default function Playgrounds() {
   return (
@@ -48,41 +39,10 @@ export default function Playgrounds() {
             <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
               <Link
                 to="#"
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-              >
-                <Home className="h-4 w-4" />
-                Dashboard
-              </Link>
-              <Link
-                to="#"
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-              >
-                <ShoppingCart className="h-4 w-4" />
-                Orders
-                <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
-                  6
-                </Badge>
-              </Link>
-              <Link
-                to="#"
                 className="flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:text-primary"
               >
-                <Package className="h-4 w-4" />
-                Products{" "}
-              </Link>
-              <Link
-                to="#"
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-              >
-                <Users className="h-4 w-4" />
-                Customers
-              </Link>
-              <Link
-                to="#"
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-              >
-                <LineChart className="h-4 w-4" />
-                Analytics
+                <Code className="h-4 w-4" />
+                Playgrounds
               </Link>
             </nav>
           </div>
@@ -185,16 +145,19 @@ export default function Playgrounds() {
           </Sheet>
         </header>
         <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
-          <div className="flex items-center">
+          <div className="flex flex-col gap-2.5">
             <h1 className="text-lg font-semibold md:text-2xl">Playground Templates</h1>
+
+            <div className="grid grid-cols-3 md:grid-cols-6 gap-5 ">
+              {
+                playgroundTypes.map((playground) => (
+                  <PlaygroundTemplate key={playground.id} playground={playground} />
+                ))
+              }
+            </div>
           </div>
-          <div className="grid grid-cols-3 md:grid-cols-6 gap-5 ">
-            {
-              playgroundTypes.map((playground) => (
-                <PlaygroundTemplate key={playground.id} playground={playground} />
-              ))
-            }
-          </div>
+          <MyPlaygrounds />
+
         </main>
       </div>
     </div>

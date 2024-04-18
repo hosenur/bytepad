@@ -17,9 +17,10 @@ const usePlaygrounds = () => {
     }
     const getMyPlaygrounds = () => {
         const url = useURL("playgrounds");
-        const { data } = useSWR(url, fetcher);
+        const { data, isLoading } = useSWR(url, fetcher);
         return {
-            data
+            data,
+            isLoading
         }
     }
     const createPlayground = (type: string) => {
