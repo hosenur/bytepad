@@ -54,5 +54,12 @@ export class PlaygroundController {
     })
     res.json(playgrounds);
   }
-  
+
+  public async getPlaygroundFileTree(req: Request, res: Response): Promise<void> {
+    const params = {
+      Bucket: "bytepad",
+      Prefix: "teal-swift"
+    }
+  }
+
 }

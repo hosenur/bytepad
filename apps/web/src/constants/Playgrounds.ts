@@ -9,7 +9,7 @@ export const playgroundTypes = [
     {
         "id": 2,
         "name": "Vue",
-        "description": "Vue + TypeScript + Vite Playground",
+        "description": "Vue JS + TypeScript + Vite Playground",
         "value": "vue",
         "image": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vuejs/vuejs-original.svg"
     },
@@ -31,7 +31,7 @@ export const playgroundTypes = [
     {
         "id": 5,
         "name": "Vanilla HTML + TS",
-        "description": "Vanilla HTML Playground with Vite",
+        "description": "Vanilla HTML Playground with Vite and TypeScript",
         "value": "html",
         "image": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg"
     },
