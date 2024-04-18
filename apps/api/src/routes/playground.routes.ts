@@ -4,8 +4,6 @@ import { PlaygroundController } from "@/controllers";
 const router: Router = Router();
 const controller: PlaygroundController = new PlaygroundController();
 
-router.get("/", controller.getPlaygrounds);
 router.post("/", controller.createPlayground);
-router.get("/files",controller.getFiles)
 
 export { router as PlaygroundRoutes };

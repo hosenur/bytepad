@@ -19,6 +19,7 @@
     "@types/express": "^4.17.21",
     "@types/morgan": "^1.9.9",
     "@types/node": "^20.11.24",
+    "@types/uuid": "^9.0.8",
     "nodemon": "^3.1.0",
     "prisma": "^5.12.1",
     "ts-node-dev": "^2.0.0",
@@ -28,6 +29,7 @@
   "dependencies": {
     "@clerk/clerk-sdk-node": "^4.13.14",
     "@prisma/client": "^5.12.1",
+    "aws-sdk": "^2.1601.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "envalid": "^8.0.0",
@@ -36,6 +38,7 @@
     "morgan": "^1.10.0",
     "resolve-tspaths": "^0.8.18",
     "socket.io": "^4.7.5",
-    "unique-names-generator": "^4.7.1"
+    "unique-names-generator": "^4.7.1",
+    "uuid": "^9.0.1"
   }
 }

@@ -9,4 +9,7 @@ export const env = envalid.cleanEnv(process.env, {
   APP_HOST: envalid.str({ default: "0.0.0.0" }),
   APP_PORT: envalid.port({ default: 8080 }),
   DATABASE_URL: envalid.url(),
+  AWS_ACCESS_KEY_ID: envalid.str(),
+  AWS_SECRET_ACCESS_KEY: envalid.str(),
+  AWS_REGION: envalid.str(),
 });

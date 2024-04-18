@@ -1,81 +1,40 @@
-# Turborepo starter
+# Bytepad
+## Tech Stack
+**Client:** React, Vite, SWR, Monaco Editor, Xterm, Tailwind, Clerk
 
-This is an official starter Turborepo.
+**Server:** NodeJS, Express, Docker Engine API, AWS S3, Clerk, Prisma
 
-## Using this example
+## Important Implementation Points :
+- Everything executed inside a docker container, which creates and isolated sandbox environment 
+- No arbitrary / user entered command is ran on the host machine.
+- Used Nginx proxy to map `*project-id.domain.com` to the port which is running the project with the project ID to  preview of the currently running web app.
+## Initial Architecture :
+During the inital build of this projct, I created framework specifc `Dockerfile`, which roughly did the following things :
+- Created a Ubuntu Container
+- Performed some misc tasks : Update + Install Node LTS + Install PNPM
+- Created the project using command
+- Replaced the framework specifc `dev` command to `dev --host` because that would make the exposed port accessible from the host machine, in our case which will be accessed via Nginx proxy to make it accessible to the internet.
+- Exposed the port
 
-Run the following command:
-
-```sh
-npx create-turbo@latest
+Here is an exmaple for a React + TypeScript + SWC project using [Vite](https://vitejs.dev/guide/)
+```Dockerfile
+from ubuntu
+run apt update
+run apt install curl -y
+run apt install -y nodejs npm 
+run npm i -g n
+run n install lts
+run corepack enable
+workdir /app
+run pnpm create vite bytereact --template react-swc-ts
+workdir /app/bytereact
+run sed -i 's/"dev": "vite",/"dev": "vite --host",/' package.json
+run pnpm i
+expose 5173
 ```
+And then created an image which I would use in future to build containers when someone created a Playground, which sums up to **(Caveat : 1)a new container for every project created.**, I had to fix that because this is a massive storage hog, The size of the image using Ubuntu after building it was **~ 1.5GB**,  So I modified the images to run on **Alpine** insteead, doing this reduced the image size to **~ 300MB** (Improvement of ~ 82%), But doing this would still mean **(Caveat 2) Blocking 300MB of storage for every project**
 
-## What's inside?
+## Current Architecture:
+The current architecture,(Abstractly how it works in Codedamn) which the project is built on used Alpine for the Image, but doesn't create a new image for every new project, but rather has a template library containing a Skeleton project for each project framework, when a new project is created an instance of the template is uploaded to AWS S3, then copied to a Alpine instance, and then is synced with S3 after any changes by the user.
 
-This Turborepo includes the following packages/apps:
-
-### Apps and Packages
-
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm build
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm dev
-```
-
-### Remote Caching
-
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-npx turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+- Running the project in a docker container basically meant running on an  isolated env, still `chroot` is implemented to set the root directory so that the user is not allowed to go out of the project folder in the container. 

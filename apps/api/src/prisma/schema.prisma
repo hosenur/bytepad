@@ -11,6 +11,7 @@ generator client {
 //create a enum for the type of playground
 model Playground {
   id               String             @id @default(cuid())
+  name             String             @unique
   type             PlaygroundType
   owner            String
   createdAt        DateTime           @default(now())
