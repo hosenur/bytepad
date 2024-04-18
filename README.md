@@ -11,8 +11,8 @@
 | `Backend` | [hosenur.cloud](https://hosenur.cloud) | Hosted on Digital Ocean, Handles the backend, and project previews on subdomains |
 
 
-## Important Implementation Points :
-- Everything executed inside a docker container, which creates and isolated sandbox environment 
+## Important Implementation Details :
+- Everything is executed inside a docker container, which creates and isolated sandbox environment for projects.
 - No arbitrary / user entered command is ran on the host machine.
 - Used Nginx proxy to map `*project-id.domain.com` to the port which is running the project with the project ID to  preview of the currently running web app.
 - Every endpoint is behind auth, only authenticated users can create projects, view projects they are a part of, delete.
