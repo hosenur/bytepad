@@ -9,6 +9,7 @@ import Playgrounds from './pages/Playgrounds'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Playground from './pages/Playground'
+import { Toaster } from 'sonner'
 const router = createBrowserRouter([
   {
     element: <RootLayout />,
@@ -21,7 +22,7 @@ const router = createBrowserRouter([
         path: "/",
         children: [
           { path: "/playgrounds", element: <Playgrounds /> },
-          { path: "/playground/:id", element: <Playground /> },
+          { path: "/playground/:name", element: <Playground /> },
         ]
       }
     ]
@@ -31,5 +32,6 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <RouterProvider router={router} />
+    <Toaster />
   </React.StrictMode>,
 )

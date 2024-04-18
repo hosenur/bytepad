@@ -3,4 +3,5 @@ export type PlaygroundTemplateType = {
     name: string;
     description: string;
     image: string;
+    value : string
 };

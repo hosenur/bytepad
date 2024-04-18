@@ -1,4 +1,4 @@
-export const PlaygroundTypes = [
+export const playgroundTypes = [
     {
         "id": 1,
         "name": "React",

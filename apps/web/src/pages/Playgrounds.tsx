@@ -30,7 +30,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { PlaygroundTypes } from "@/constants/Playgrounds"
+import { playgroundTypes } from "@/constants/Playgrounds"
 import { Link } from "react-router-dom"
 
 export default function Playgrounds() {
@@ -188,9 +188,9 @@ export default function Playgrounds() {
           <div className="flex items-center">
             <h1 className="text-lg font-semibold md:text-2xl">Playground Templates</h1>
           </div>
-          <div className="grid grid-cols-5 gap-5 p-5">
+          <div className="grid grid-cols-3 md:grid-cols-6 gap-5 ">
             {
-              PlaygroundTypes.map((playground) => (
+              playgroundTypes.map((playground) => (
                 <PlaygroundTemplate key={playground.id} playground={playground} />
               ))
             }
