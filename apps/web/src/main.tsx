@@ -4,12 +4,12 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import "./App.css"
 import AuthenticatedLayout from './layouts/AuthenticatedLayout'
 import RootLayout from './layouts/RootLayout'
-import { Landing } from './pages/Landing'
 import Playgrounds from './pages/Playgrounds'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Playground from './pages/Playground'
 import { Toaster } from 'sonner'
+import {Landing} from './pages/Landing'
 const router = createBrowserRouter([
   {
     element: <RootLayout />,

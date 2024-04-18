@@ -1,3 +1,5 @@
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@clerk/clerk-react";
 import {
     animate,
     motion,
@@ -5,10 +7,13 @@ import {
     useMotionValue,
 } from "framer-motion";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const COLORS_TOP = ["#13FFAA", "#1E67C6", "#CE84CF", "#DD335C"];
 
 export const Landing = () => {
+    const { isSignedIn } = useAuth();
+    const navigate = useNavigate()
     const color = useMotionValue(COLORS_TOP[0]);
 
     useEffect(() => {
@@ -37,7 +42,14 @@ export const Landing = () => {
                 <p className="my-6 max-w-2xl text-center text-base leading-relaxed md:text-lg md:leading-relaxed">
                     Byte Pad is an online playground for developers. React, Next.js, Nuxt ? We got you covered. Start coding now. Choose from a plethora of templates and get started.
                 </p>
-                <motion.button
+                <Button
+                    onClick={() => navigate(isSignedIn ? "/playgrounds" : "/login")}
+                    variant={"default"}>
+                    {
+                        isSignedIn ? "Go to Playgrounds" : "Get Started"
+                    }
+                </Button>
+                {/* <motion.button
                     style={{
                         boxShadow,
                     }}
@@ -50,7 +62,7 @@ export const Landing = () => {
                     className="group relative flex w-fit items-center gap-1.5 rounded-md bg-gray-950/10 px-4 py-2 text-gray-50 transition-colors hover:bg-gray-950/50"
                 >
                     Get Started
-                </motion.button>
+                </motion.button> */}
             </div>
 
         </motion.section>
