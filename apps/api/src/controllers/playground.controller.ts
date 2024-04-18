@@ -38,4 +38,21 @@ export class PlaygroundController {
     res.status(201).json({ name });
   }
 
+  public async getPlaygrounds(req: Request, res: Response): Promise<void> {
+    if (!req.auth.userId) {
+      res.status(401).json({ message: "Unauthorized" });
+      return;
+    }
+    const playgrounds = await prisma.playground.findMany({
+      where: {
+        PlaygroundMember: {
+          some: {
+            userId: req.auth.userId
+          }
+        }
+      }
+    })
+    res.json(playgrounds);
+  }
+  
 }
