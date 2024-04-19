@@ -1,10 +1,9 @@
 import { useAuth } from "@clerk/clerk-react";
+import Editor from "@monaco-editor/react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import io, { Socket } from 'socket.io-client';
-import Editor from "@monaco-editor/react"
 import { toast } from "sonner";
-import { Resizable } from 're-resizable';
 
 export default function Playground() {
   const { tag } = useParams()

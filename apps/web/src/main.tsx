@@ -1,15 +1,14 @@
-import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { Toaster } from 'sonner'
 import "./App.css"
 import AuthenticatedLayout from './layouts/AuthenticatedLayout'
 import RootLayout from './layouts/RootLayout'
-import Playgrounds from './pages/Playgrounds'
+import { Landing } from './pages/Landing'
 import Login from './pages/Login'
-import Register from './pages/Register'
 import Playground from './pages/Playground'
-import { Toaster } from 'sonner'
-import {Landing} from './pages/Landing'
+import Playgrounds from './pages/Playgrounds'
+import Register from './pages/Register'
 const router = createBrowserRouter([
   {
     element: <RootLayout />,
