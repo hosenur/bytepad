@@ -22,7 +22,7 @@ const router = createBrowserRouter([
         path: "/",
         children: [
           { path: "/playgrounds", element: <Playgrounds /> },
-          { path: "/playground/:name", element: <Playground /> },
+          { path: "/playground/:tag", element: <Playground /> },
         ]
       }
     ]
@@ -30,11 +30,11 @@ const router = createBrowserRouter([
 ])
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <main className='font-manrope'>
 
       <RouterProvider router={router} />
       <Toaster />
     </main>
-  </React.StrictMode>,
+  // </React.StrictMode>,
 )

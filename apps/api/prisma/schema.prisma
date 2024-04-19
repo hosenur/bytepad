@@ -11,8 +11,8 @@ generator client {
 //create a enum for the type of playground
 model Playground {
   id               String             @id @default(cuid())
-  name             String             @unique
-  type             PlaygroundType
+  tag              String             @unique
+  framework        FrameworkType
   owner            String
   createdAt        DateTime           @default(now())
   PlaygroundMember PlaygroundMember[]
@@ -32,11 +32,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum PlaygroundType {
+enum FrameworkType {
   REACT
+  VUE
   NEXT_APP
   NEXT_PAGE
-  VUE
 }
 
 enum Role {

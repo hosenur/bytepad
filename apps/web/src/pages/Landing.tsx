@@ -43,7 +43,7 @@ export const Landing = () => {
                     Byte Pad is an online playground for developers. React, Next.js, Nuxt ? We got you covered. Start coding now. Choose from a plethora of templates and get started.
                 </p>
                 <Button
-                    onClick={() => navigate(isSignedIn ? "/playgrounds" : "/login")}
+                    onClick={() => navigate(isSignedIn ? "/playgrounds" : "/login")}    
                     variant={"default"}>
                     {
                         isSignedIn ? "Go to Playgrounds" : "Get Started"

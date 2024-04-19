@@ -1,11 +1,13 @@
-const mappings: Record<string, string>
+import { FrameworkType } from "types"
+const mappings: Record<FrameworkType, string>
     = {
-    "react": "bytereact",
-    "vue": "bytevue",
+    "REACT": "bytereact",
+    "VUE": "bytevue",
+    "NEXT-APP": "bytenext"
 }
-export const getTemplateName = (type: string) => {
-    if (mappings[type]) {
-        return mappings[type]
+export const getTemplateName = (framework: FrameworkType) => {
+    if (mappings[framework]) {
+        return mappings[framework]
     }
     else {
         return "vanilla"

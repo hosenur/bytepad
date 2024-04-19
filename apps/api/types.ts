@@ -2,11 +2,12 @@ export type PlaygroundTemplateType = {
     id: number;
     name: string;
     description: string;
+    image: string;
     framework: FrameworkType;
 };
 export type PlaygroundType = {
     id: number;
-    tag: string;
+    name: string;
     framework: FrameworkType;
     owner: string;
     createdAt: string;

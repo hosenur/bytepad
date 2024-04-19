@@ -12,4 +12,5 @@ export const env = envalid.cleanEnv(process.env, {
   AWS_ACCESS_KEY_ID: envalid.str(),
   AWS_SECRET_ACCESS_KEY: envalid.str(),
   AWS_REGION: envalid.str(),
+  REDIS_URL: envalid.url(),
 });

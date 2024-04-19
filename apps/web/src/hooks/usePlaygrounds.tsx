@@ -23,12 +23,12 @@ const usePlaygrounds = () => {
             isLoading
         }
     }
-    const createPlayground = (type: string) => {
+    const createPlayground = (framework: string) => {
         const url = useURL("playgrounds");
-        toast.promise(AuthAxios.post(url, { type }), {
+        toast.promise(AuthAxios.post(url, { framework }), {
             loading: 'Creating playground',
             success: (res) => {
-                navigate(`/playground/${res.data.name}`);
+                navigate(`/playground/${res.data.tag}`);
                 return 'Playground created';
             },
             error: 'Error',
