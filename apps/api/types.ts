@@ -19,5 +19,6 @@ export type PlaygroundType = {
 export enum FrameworkType {
     REACT = "REACT",
     VUE = "VUE",
-    NEXT_APP = "NEXT-APP"
+    NEXTAPP = "NEXTAPP",
+    NEXTPAGE = "NEXTPAGE"
 }

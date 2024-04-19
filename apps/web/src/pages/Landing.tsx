@@ -26,7 +26,6 @@ export const Landing = () => {
     }, []);
 
     const backgroundImage = useMotionTemplate`radial-gradient(125% 125% at 50% 0%, #020617 50%, ${color})`;
-    const boxShadow = useMotionTemplate`0px 4px 24px ${color}`;
 
     return (
         <motion.section

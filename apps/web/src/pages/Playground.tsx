@@ -1,19 +1,16 @@
 import { useAuth } from "@clerk/clerk-react";
-import Editor from "@monaco-editor/react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import io, { Socket } from 'socket.io-client';
 import { toast } from "sonner";
-
 export default function Playground() {
   const { tag } = useParams()
   const { getToken } = useAuth()
-  const [port, setPort] = useState<string | null>(null)
   const [socket, setSocket] = useState<Socket | null>(null)
   const [containerStatus, setContainerStatus] = useState<boolean>(false)
-  const [isPreview, setIsPreview] = useState<boolean>(false)
-  
+  const [fileTree, setFileTree] = useState<any>(null)
 
+  // useEffect to create a new socket connection
   useEffect(() => {
     const newSocket = io('http://localhost:8080', {
       auth: {
@@ -27,18 +24,18 @@ export default function Playground() {
     }
   }, [])
 
+  // useEffect to connect to the container
   useEffect(() => {
     if (!socket || !tag) {
       return
     }
     socket.emit("getContainer", tag)
-    socket.on("containerCreated", (port: number) => {
-      console.log(port)
-      toast.success("Connected to container")
+    socket.on("containerCreated", () => {
       setContainerStatus(true)
-      setPort(port.toString())
+      toast.success("Connected to container")
     })
   }, [socket, tag])
+
   useEffect(() => {
     if (containerStatus == false || !socket || !tag) {
       return
@@ -46,27 +43,12 @@ export default function Playground() {
     socket.emit("getDirectory", tag)
     socket.on("directory", (directory: any) => {
       console.log(directory)
+      setFileTree(directory)
     })
   }, [socket, tag, containerStatus])
+
   return (
-    <div className="flex max-w-full">
-      <div className="w-1/6 h-screen bg-zinc-900">
-
-      </div>
-      <div className="w-3/6">
-        <Editor
-          theme="vs-dark"
-          height="100vh"
-          defaultLanguage="javascript"
-          defaultValue="// some comment"
-        />
-
-      </div>
-      {
-        isPreview ? <iframe src={`http://localhost:${port}`} className="w-2/6 h-screen" /> : <div className="w-2/6 animate-pulse h-screen bg-zinc-900"></div>
-      }
-
-
+    <div className="flex overflow-hidden max-h-[100vh] max-w-[100vw]">
     </div>
   )
 }

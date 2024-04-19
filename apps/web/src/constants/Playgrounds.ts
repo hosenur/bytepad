@@ -1,7 +1,8 @@
 enum FrameworkType {
     REACT = "REACT",
     VUE = "VUE",
-    NEXT_APP = "NEXT-APP"
+    NEXTAPP = "NEXTAPP",
+    NEXTPAGE = "NEXTPAGE"
 }
 export const playgroundTypes = [
     {
@@ -20,7 +21,7 @@ export const playgroundTypes = [
         "id": 3,
         "name": "Next.js App Router",
         "description": "Next.js Project with App Router Playground",
-        "framework": FrameworkType.NEXT_APP,
+        "framework": FrameworkType.NEXTAPP,
     },
 
 ]

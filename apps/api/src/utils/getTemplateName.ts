@@ -3,7 +3,8 @@ const mappings: Record<FrameworkType, string>
     = {
     "REACT": "bytereact",
     "VUE": "bytevue",
-    "NEXT-APP": "bytenext"
+    "NEXTAPP": "bytenextapp",
+    "NEXTPAGE": "bytenextpage"
 }
 export const getTemplateName = (framework: FrameworkType) => {
     if (mappings[framework]) {

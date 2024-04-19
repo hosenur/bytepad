@@ -35,8 +35,8 @@ datasource db {
 enum FrameworkType {
   REACT
   VUE
-  NEXT_APP
-  NEXT_PAGE
+  NEXTAPP
+  NEXTPAGE
 }
 
 enum Role {

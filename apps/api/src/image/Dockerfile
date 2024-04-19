@@ -1,2 +1,2 @@
-from node:lts-alpine
+from oven/bun:latest
 expose 3000

@@ -9,6 +9,7 @@ import {
   Users
 } from "lucide-react"
 
+import MyPlaygrounds from "@/components/MyPlaygrounds"
 import PlaygroundTemplate from "@/components/PlaygroundTemplate"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -22,7 +23,6 @@ import {
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { playgroundTypes } from "@/constants/Playgrounds"
 import { Link } from "react-router-dom"
-import MyPlaygrounds from "@/components/MyPlaygrounds"
 
 export default function Playgrounds() {
   return (

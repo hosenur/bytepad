@@ -5,22 +5,32 @@ import { Server } from "socket.io";
 import * as http from "http";
 import { ClerkExpressWithAuth } from "@clerk/clerk-sdk-node";
 import { s3 } from "./utils/s3";
-import { createContainer, getDirectory } from "./utils/containerUtils";
-//last request map stores the tag : last request time
+import { redis } from "./utils/redis";
+import { createContainer, getDirectory } from "@/utils/containerUtils"
 const lastRequestMap = new Map<string, number>();
 const execAsync = util.promisify(exec);
-
-//set interval to check for idle containers
-// setInterval(() => {
-//   lastRequestMap.forEach(async (time, tag) => {
-//     if (Date.now() - time > 30000) {
-//       await execAsync(`docker stop ${tag}`);
-//       await execAsync(`docker rm ${tag}`);
-//       lastRequestMap.delete(tag);
-//       console.log(`Container with tag ${tag} stopped and removed`)
-//     }
-//   });
-// }, 10000);
+async function stopIdleContainers() {
+  const keys = await redis.keys("*");
+  if (!keys) return;
+  keys.forEach(async (key) => {
+    const containerInfo = await redis.get(key);
+    const { lastRequest, port } = JSON.parse(containerInfo || "{}");
+    if (Date.now() - lastRequest > 60000) {
+      console.log(`Stopping container ${key}`)
+      try {
+        await execAsync(`docker stop ${key}`);
+        await execAsync(`docker rm ${key}`);
+        await redis.del(key);
+      }
+      catch (e) {
+        console.error(e)
+      }
+    }
+  });
+}
+setInterval(() => {
+  stopIdleContainers();
+}, 60000);
 
 function bootstrap() {
   const server = http.createServer(app);
@@ -51,33 +61,24 @@ function bootstrap() {
     });
 
     socket.on("getContainer", async (tag: string) => {
-      lastRequestMap.set(tag, Date.now());
-      const appPort = await createContainer(tag)
-      console.log(appPort,"appport")
-      socket.emit("containerCreated", appPort)
+      const containerInfo = await redis.get(tag);
+      const existingPort = JSON.parse(containerInfo || "{}").port;
+      if (existingPort) {
+        socket.emit("containerCreated", existingPort);
+        const newcontainerInfo = JSON.stringify({ port: existingPort, lastRequest: Date.now() });
+        await redis.set(tag, newcontainerInfo);
+        return;
+      }
+      const newPort = await createContainer(tag);
+      socket.emit("containerCreated", newPort);
     })
 
     socket.on("getDirectory", async (tag: string) => {
-      lastRequestMap.set(tag, Date.now());
-      const directory = await getDirectory(tag)
+      const directory = await getDirectory(tag);
       console.log(directory)
-      socket.emit("directory", directory)
+      socket.emit("directory", directory);
     })
-    socket.on("getFileContent", async (tag: string, file: string) => {
-      lastRequestMap.set(tag, Date.now());
-      const { stdout: content } = await execAsync(`docker exec ${tag} cat /app/${file}`);
-      socket.emit("fileContent", content)
-    })
-    socket.on("saveFile", async (tag: string, file: string, content: string) => {
-      lastRequestMap.set(tag, Date.now());
-      await execAsync(`docker exec ${tag} sh -c "echo '${content}' > /app/${file}"`);
-      const params = {
-        Bucket: "bytepad",
-        Key: `playgrounds/${tag}/${file}`,
-        Body: content
-      }
-      await s3.putObject(params).promise()
-    })
+
   });
 
 

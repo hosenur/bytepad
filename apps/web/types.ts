@@ -10,6 +10,7 @@ export type PlaygroundType = {
     framework: FrameworkType;
     owner: string;
     createdAt: string;
+    running: boolean;
     PlaygroundMember: {
         role: string;
         userId: string;
@@ -18,5 +19,6 @@ export type PlaygroundType = {
 export enum FrameworkType {
     REACT = "REACT",
     VUE = "VUE",
-    NEXT_APP = "NEXT-APP"
+    NEXTAPP = "NEXTAPP",
+    NEXTPAGE = "NEXTPAGE"
 }

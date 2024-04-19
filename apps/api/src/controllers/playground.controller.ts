@@ -1,10 +1,17 @@
 import prisma from "@/utils/db";
 import { getTemplateName } from "@/utils/getTemplateName";
+import { redis } from "@/utils/redis";
 import { setupPlayground } from "@/utils/setupPlyagound";
+import { Playground, PlaygroundMember } from "@prisma/client";
 import type { Request, Response } from "express";
 import { animals, colors, uniqueNamesGenerator } from "unique-names-generator";
 import { v4 as uuid } from 'uuid';
 export class PlaygroundController {
+  public async getPlaygroundStatus(req: Request, res: Response): Promise<void> {
+    const { tag } = req.params;
+    const running = await redis.get(tag) ? true : false;
+    res.json({ running });
+  }
 
 
   public async createPlayground(req: Request, res: Response): Promise<void> {
@@ -37,11 +44,12 @@ export class PlaygroundController {
   }
 
   public async getPlaygrounds(req: Request, res: Response): Promise<void> {
+    type ResponseType = (Playground & { running: boolean })[];
     if (!req.auth.userId) {
       res.status(401).json({ message: "Unauthorized" });
       return;
     }
-    const playgrounds = await prisma.playground.findMany({
+    const data = await prisma.playground.findMany({
       where: {
         PlaygroundMember: {
           some: {
@@ -50,15 +58,14 @@ export class PlaygroundController {
         }
       }
     })
+    const playgrounds: ResponseType = await Promise.all(data.map(async playground => {
+      const running = await redis.get(playground.tag) ? true : false;
+      return {
+        running,
+        ...playground
+      };
+    }));
     res.json(playgrounds);
-  }
-
-  public async getPlaygroundFileTree(req: Request, res: Response): Promise<void> {
-    const params = {
-      Bucket: "bytepad",
-      Prefix: "teal-swift"
-    }
-
   }
 
 }

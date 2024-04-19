@@ -2,7 +2,7 @@ import useSWR from "swr";
 import { useURL } from "./useURL";
 import Axios from 'axios'
 import { useAuth } from "@clerk/clerk-react";
-import useAuthAxios from "./useAutrhAxios";
+import useAuthAxios from "./useAuthAxios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
