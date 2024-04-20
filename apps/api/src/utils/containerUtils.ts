@@ -1,26 +1,29 @@
-import { exec } from 'child_process';
-import fs from 'fs-extra'
+import { exec, ExecException } from 'child_process'; // Added type ExecException
+import fs, { Dirent } from 'fs-extra'; // Added type Dirent
 import util from 'util';
 import { redis } from './redis';
+
 interface File {
     type: "file" | "dir";
     name: string;
+    path?: string; // Added optional path property
 }
 
 const execAsync = util.promisify(exec);
-const getRandomPort = () => {
+
+const getRandomPort = (): number => {
     return Math.floor(Math.random() * 2000) + 3000;
 }
-export const createContainer = async (tag: string) => {
-    //check if a docker container with the same tag is running, by execAsync
+
+export const createContainer = async (tag: string): Promise<number | void> => { // Added return type Promise<number | void>
     const existingContainer = await execAsync(`docker ps -a -q --filter "name=${tag}"`);
+
     if (existingContainer.stdout) {
         console.log("Container Already Exists For Tag: ", tag);
         return;
     }
 
     console.log("Creating Container For Tag: ", tag);
-
 
     const port = getRandomPort();
     await execAsync(`mkdir -p ./tmp/${tag} && aws s3 cp s3://bytepad/playgrounds/${tag} ./tmp/${tag} --recursive`);
@@ -30,10 +33,9 @@ export const createContainer = async (tag: string) => {
     return port;
 }
 
-
 export const getDirectory = (dir: string, baseDir: string): Promise<File[]> => {
     return new Promise((resolve, reject) => {
-        fs.readdir(dir, { withFileTypes: true }, (err, files) => {
+        fs.readdir(dir, { withFileTypes: true }, (err: NodeJS.ErrnoException | null, files: Dirent[]) => { // Added types for err and files parameters
             if (err) {
                 reject(err);
             } else {
@@ -43,25 +45,10 @@ export const getDirectory = (dir: string, baseDir: string): Promise<File[]> => {
     });
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-export const getFile = async (pathToFile: string, tag: string) => {
+export const getFile = async (pathToFile: string, tag: string): Promise<string> => { // Added return type Promise<string>
     await redis.set(tag, JSON.stringify({ port: 3000, lastRequest: Date.now() }));
     return new Promise((resolve, reject) => {
-        fs.readFile(pathToFile, 'utf8', (err, data) => {
+        fs.readFile(pathToFile, 'utf8', (err: NodeJS.ErrnoException | null, data: string) => { // Added types for err and data parameters
             if (err) {
                 reject(err);
             } else {
@@ -70,18 +57,20 @@ export const getFile = async (pathToFile: string, tag: string) => {
         })
     });
 }
+
 export const saveFile = async (file: string, content: string, tag: string): Promise<void> => {
     return new Promise((resolve, reject) => {
-        fs.writeFile(file, content, "utf8", (err) => {
+        fs.writeFile(file, content, "utf8", (err: NodeJS.ErrnoException | null) => { // Added type for err parameter
             if (err) {
                 return reject(err);
             }
-            sysncFolderToS3(tag).then(() => {
+            syncFolderToS3(tag).then(() => {
                 resolve();
             })
         });
     });
 }
-function sysncFolderToS3(tag: string) {
+
+function syncFolderToS3(tag: string) { // Added return type Promise<void>
     return execAsync(`aws s3 sync ./tmp/${tag} s3://bytepad/playgrounds/${tag} --exclude "node_modules/*"`);
 }

@@ -1,7 +1,6 @@
-import { clearPlayground } from "@/utils/containerUtils";
 import prisma from "@/utils/db";
 import { getTemplateName } from "@/utils/getTemplateName";
-import { setupPlayground } from "@/utils/playgroundUtils";
+import { clearPlayground, setupPlayground } from "@/utils/playgroundUtils";
 import { redis } from "@/utils/redis";
 import { s3 } from "@/utils/s3";
 import { Playground } from "@prisma/client";
