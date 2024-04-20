@@ -1,12 +1,12 @@
+import { usePlaygrounds } from "@/hooks/usePlaygrounds";
 import { useSocket } from "@/hooks/useSocket";
 import { File, RemoteFile, Type, buildFileTree } from "@/lib/fsUtils";
+import Editor from "@monaco-editor/react";
+import { Trash } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { FileExplorer } from "./FileExplorer";
-import Editor from "@monaco-editor/react"
-import { Trash, Trash2 } from "lucide-react";
-import { usePlaygrounds } from "@/hooks/usePlaygrounds";
 
 
 export default function Playground() {
@@ -20,6 +20,11 @@ export default function Playground() {
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
   const { deletePlayground } = usePlaygrounds()
   const socket = useSocket(tag, token);
+  const handleDeletePlyground = () => {
+    if (!tag) return;
+    deletePlayground(tag)
+    navigate("/playgrounds")
+  }
   useEffect(() => {
     if (!socket || !tag) {
       return;
@@ -54,15 +59,6 @@ export default function Playground() {
       });
     }
   };
-  function debounce(func: (value: string) => void, wait: number) {
-    let timeout: number;
-    return (value: string) => {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        func(value);
-      }, wait);
-    };
-  }
 
   return (
     <div className="flex overflow-hidden max-h-[100vh] max-w-[100vw]">
@@ -74,21 +70,25 @@ export default function Playground() {
           language="typescript"
           theme="vs-dark"
           height={"80vh"}
-          onChange={debounce((value) => {
+          // onChange={debounce((value) => {
+          //   if (!selectedFile) {
+          //     return;
+          //   }
+          //   console.log("cahnged")
+          //   socket?.emit("saveFile", { path: selectedFile.path, content: value });
+          // }, 1000)}
+          //the incgabge wiull debounce by 3 seconds, then fire the socket event
+          onChange={(value) => {
             if (!selectedFile) {
               return;
             }
-            console.log("cahnged")
             socket?.emit("saveFile", { path: selectedFile.path, content: value });
-          }, 1000)}
+          }}
           value={selectedFile?.content}
         />
       </div>
       <div
-        onClick={() => {
-          deletePlayground(tag)
-          navigate("/playgrounds")
-        }}
+        onClick={handleDeletePlyground}
         className="fixed bottom-20 right-20 bg-zinc-100 rounded border border-zinc-200 p-2.5 cursor-pointer">
         <Trash className="w-8 h-8" />
       </div>
