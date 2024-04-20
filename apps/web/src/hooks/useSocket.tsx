@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Socket, io } from "socket.io-client";
 
-export const useSocket = (tag: string | undefined, token: string | null) => {
+export const useSocket = (tag: string | undefined) => {
     const [socket, setSocket] = useState<Socket | undefined>(undefined);
 
     useEffect(() => {
@@ -12,7 +12,7 @@ export const useSocket = (tag: string | undefined, token: string | null) => {
             query: {
                 tag
             },
-            auth: { token: `Bearer ${token}` }
+            auth: { token: `Bearer` }
         });
         setSocket(newSocket);
 
@@ -21,7 +21,7 @@ export const useSocket = (tag: string | undefined, token: string | null) => {
                 newSocket.close();
             }
         };
-    }, [tag, token]);
+    }, [tag]);
 
     return socket;
 }

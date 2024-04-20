@@ -16,10 +16,9 @@ export default function Playground() {
     navigate("/playgrounds");
   }
   const [remoteFiles, setRemoteFiles] = useState<RemoteFile[]>([]);
-  const [token, setToken] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
   const { deletePlayground } = usePlaygrounds()
-  const socket = useSocket(tag, token);
+  const socket = useSocket(tag);
   const handleDeletePlyground = () => {
     if (!tag) return;
     deletePlayground(tag)
