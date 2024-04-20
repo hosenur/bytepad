@@ -1,4 +1,4 @@
-import { FrameworkType } from "types"
+import { FrameworkType } from "@/types"
 const mappings: Record<FrameworkType, string>
     = {
     "REACT": "bytereact",

@@ -1,4 +1,4 @@
-import { FrameworkType } from "types";
+import { FrameworkType } from "@/types";
 import { getTemplateName } from "./getTemplateName";
 import { s3 } from "./s3";
 import fs from "fs-extra"
