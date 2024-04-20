@@ -2,6 +2,7 @@ import { exec, ExecException } from 'child_process'; // Added type ExecException
 import fs, { Dirent } from 'fs-extra'; // Added type Dirent
 import util from 'util';
 import { redis } from './redis';
+import { clearPlayground } from './playgroundUtils';
 
 interface File {
     type: "file" | "dir";
@@ -16,12 +17,15 @@ const getRandomPort = (): number => {
 }
 
 export const createContainer = async (tag: string): Promise<number | void> => { // Added return type Promise<number | void>
-    const existingContainer = await execAsync(`docker ps -a -q --filter "name=${tag}"`);
-    const exists = fs.existsSync(`./tmp/${tag}`);
+    const containerExists = await checkTag(tag)
+    const filesExists = fs.existsSync(`./tmp/${tag}`)
 
-    if (existingContainer.stdout && exists) {
+    if (filesExists && containerExists) {
         console.log("Container Already Exists For Tag: ", tag);
         return;
+    }
+    if (!filesExists || !containerExists) {
+        await clearPlayground(tag)
     }
 
     console.log("Creating Container For Tag: ", tag);
