@@ -8,6 +8,5 @@ dotenv.config({
 export const env = envalid.cleanEnv(process.env, {
   APP_HOST: envalid.str({ default: "0.0.0.0" }),
   APP_PORT: envalid.port({ default: 7070 }),
-  AWS_REGION: envalid.str(),
   REDIS_URL: envalid.url(),
 });
