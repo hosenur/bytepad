@@ -45,3 +45,4 @@ And then created an image which I would use in future to build containers when s
 The current architecture,(Abstractly how it works in Codedamn) which the project is built on used Alpine for the Image, but doesn't create a new image for every new project, but rather has a template library containing a Skeleton project for each project framework, when a new project is created an instance of the template is uploaded to AWS S3, then copied to a Alpine instance, and then is synced with S3 after any changes by the user.
 
 - Running the project in a docker container basically meant running on an  isolated env, still `chroot` is implemented to set the root directory so that the user is not allowed to go out of the project folder in the container. 
+ok
