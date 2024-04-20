@@ -1,4 +1,4 @@
-import { createContainer, getDirectory, getFile, saveFile } from "@/utils/containerUtils";
+import { checkTag, createContainer, getDirectory, getFile, saveFile } from "@/utils/containerUtils";
 import { ClerkExpressWithAuth } from "@clerk/clerk-sdk-node";
 import { exec } from "child_process";
 import * as http from "http";
@@ -6,30 +6,36 @@ import { Server } from "socket.io";
 import util from "util";
 import { app } from "./app";
 import { redis } from "./utils/redis";
-const openConnections = new Map<string, number>();
 const execAsync = util.promisify(exec);
 async function stopIdleContainers() {
+  console.log("Checking for idle containers");
   const keys = await redis.keys("*");
   if (!keys) return;
-  keys.forEach(async (key) => {
+  await Promise.all(keys.map(async (key) => {
     const containerInfo = await redis.get(key);
     const { lastRequest, port } = JSON.parse(containerInfo || "{}");
-    if (Date.now() - lastRequest > 20 * 60 * 1000) {
-      console.log(`Stopping container ${key}`)
+    console.log(`Last request from ${key} was: ${(Date.now() - lastRequest) / 1000 / 60} minues before`);
+    if (Date.now() - lastRequest > 5 * 60 * 1000) {
+      const containerExists = await checkTag(key);
+      if (!containerExists) {
+        console.log(`Container ${key} does not exist`);
+        return;
+      }
       try {
         await execAsync(`docker stop ${key}`);
         await execAsync(`docker rm ${key}`);
-      }
-      catch (e) {
-        console.error(e)
+      } catch (e) {
+        console.error(e);
       }
       await redis.del(key);
     }
-  });
+  }));
 }
-setInterval(() => {
-  stopIdleContainers();
-}, 60000);
+
+setInterval(async () => {
+  await stopIdleContainers();
+}, 10000);
+
 
 function bootstrap() {
   const server = http.createServer(app);
@@ -70,17 +76,17 @@ function bootstrap() {
       const dirPath = `./tmp/${tag}/${dir}`;
       const contents = await getDirectory(dirPath, dir);
       callback(contents);
-  });
+    });
 
     socket.on("getFile", async ({ path: filePath }: { path: string }, callback) => {
       const fullPath = `./tmp/${tag}${filePath}`;
       const data = await getFile(fullPath, tag);
       callback(data);
     })
-    socket.on("saveFile", async ({ path: filePath, content }: { path: string, content: string,tag:string }) => {
-      const fullPath =  `./tmp/${tag}${filePath}`;
-      await saveFile(fullPath, content,tag);
-  });
+    socket.on("saveFile", async ({ path: filePath, content }: { path: string, content: string, tag: string }) => {
+      const fullPath = `./tmp/${tag}${filePath}`;
+      await saveFile(fullPath, content, tag);
+    });
 
 
     socket.on("disconnect", (socket) => {

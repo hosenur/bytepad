@@ -17,8 +17,9 @@ const getRandomPort = (): number => {
 
 export const createContainer = async (tag: string): Promise<number | void> => { // Added return type Promise<number | void>
     const existingContainer = await execAsync(`docker ps -a -q --filter "name=${tag}"`);
+    const exists = fs.existsSync(`./tmp/${tag}`);
 
-    if (existingContainer.stdout) {
+    if (existingContainer.stdout && exists) {
         console.log("Container Already Exists For Tag: ", tag);
         return;
     }
@@ -71,6 +72,21 @@ export const saveFile = async (file: string, content: string, tag: string): Prom
     });
 }
 
+// Funciton to Sync Local Folder to S3
 function syncFolderToS3(tag: string) { // Added return type Promise<void>
     return execAsync(`aws s3 sync ./tmp/${tag} s3://bytepad/playgrounds/${tag} --exclude "node_modules/*"`);
+}
+
+// Function to check if a docker with  a tag exists and return true or false asynchrnously
+export function checkTag(tag: string) {
+    return new Promise((resolve, reject) => {
+        exec(`docker ps -a -q --filter "name=${tag}"`, (err: ExecException | null, stdout: string, stderr: string) => {
+            if (err) {
+                reject(err);
+            }
+            else {
+                resolve(stdout ? true : false);
+            }
+        })
+    })
 }

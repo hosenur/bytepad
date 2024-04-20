@@ -53,8 +53,6 @@ export const setupPlayground = async (framework: FrameworkType, tag: string) => 
 };
 
 export const clearPlayground = async (tag: string) => {
-    //await fs delte
-    fs.remove(`./tmp/${tag}`);
     try {
         await execAsync(`docker stop ${tag}`);
     }
