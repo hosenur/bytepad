@@ -1,4 +1,4 @@
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import { useURL } from "./useURL";
 import Axios from 'axios'
 import { useAuth } from "@clerk/clerk-react";
@@ -8,6 +8,7 @@ import { toast } from "sonner";
 
 const usePlaygrounds = () => {
     const { getToken } = useAuth()
+    const { mutate } = useSWRConfig()
     const navigate = useNavigate()
     const AuthAxios = useAuthAxios()
     const fetcher = async (url: string) => {
@@ -23,6 +24,15 @@ const usePlaygrounds = () => {
             isLoading
         }
     }
+    const deletePlayground = (tag: string) => {
+        const url = useURL(`playgrounds/${tag}`);
+        toast.promise(AuthAxios.delete(url), {
+            loading: 'Deleting playground',
+            success: 'Playground deleted',
+            error: 'Error'
+        });
+        mutate("/playgrounds")
+    }
     const createPlayground = (framework: string) => {
         const url = useURL("playgrounds");
         toast.promise(AuthAxios.post(url, { framework }), {
@@ -34,6 +44,6 @@ const usePlaygrounds = () => {
             error: 'Error',
         });
     }
-    return { getMyPlaygrounds, createPlayground };
+    return { getMyPlaygrounds, createPlayground, deletePlayground };
 }
 export { usePlaygrounds };

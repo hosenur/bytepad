@@ -1,6 +1,7 @@
+import { env } from "@/config"
 import { createClient, RedisClientType } from "redis"
 const redisClient: RedisClientType = createClient({
-    url: process.env.REDIS_URL
+    url: env.REDIS_URL
 })
 redisClient.on("error", (error) => {
     console.error(error)

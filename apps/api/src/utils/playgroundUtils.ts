@@ -1,6 +1,12 @@
 import { FrameworkType } from "types";
 import { getTemplateName } from "./getTemplateName";
 import { s3 } from "./s3";
+import fs from "fs-extra"
+import util from "util"
+import { exec } from 'child_process';
+import { redis } from "./redis";
+
+const execAsync = util.promisify(exec);
 
 // Assuming listedObjects.Contents is an array of S3.ObjectListEntry
 async function copyFolderContents(
@@ -45,3 +51,21 @@ export const setupPlayground = async (framework: FrameworkType, tag: string) => 
         throw error;
     }
 };
+
+export const clearPlayground = async (tag: string) => {
+    //await fs delte
+    fs.remove(`./tmp/${tag}`);
+    try {
+        await execAsync(`docker stop ${tag}`);
+    }
+    catch (e) {
+        console.error(e);
+    }
+    try {
+        await execAsync(`docker rm ${tag}`);
+    }
+    catch (e) {
+        console.error(e);
+    }
+    await redis.del(tag);
+}

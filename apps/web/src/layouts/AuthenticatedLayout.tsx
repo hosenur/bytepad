@@ -4,7 +4,6 @@ import { Outlet, useNavigate } from "react-router-dom"
 
 export default function AuthenticatedLayout() {
     const { userId, isLoaded } = useAuth()
-    console.log(userId)
     const navigate = useNavigate()
 
 

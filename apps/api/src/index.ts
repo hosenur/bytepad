@@ -1,13 +1,12 @@
-import { app } from "./app";
-import util from "util";
-import { exec } from "child_process";
-import { Server } from "socket.io";
-import * as http from "http";
+import { createContainer, getDirectory, getFile, saveFile } from "@/utils/containerUtils";
 import { ClerkExpressWithAuth } from "@clerk/clerk-sdk-node";
-import { s3 } from "./utils/s3";
+import { exec } from "child_process";
+import * as http from "http";
+import { Server } from "socket.io";
+import util from "util";
+import { app } from "./app";
 import { redis } from "./utils/redis";
-import { createContainer, getDirectory } from "@/utils/containerUtils"
-const lastRequestMap = new Map<string, number>();
+const openConnections = new Map<string, number>();
 const execAsync = util.promisify(exec);
 async function stopIdleContainers() {
   const keys = await redis.keys("*");
@@ -15,16 +14,16 @@ async function stopIdleContainers() {
   keys.forEach(async (key) => {
     const containerInfo = await redis.get(key);
     const { lastRequest, port } = JSON.parse(containerInfo || "{}");
-    if (Date.now() - lastRequest > 60000) {
+    if (Date.now() - lastRequest > 20 * 60 * 1000) {
       console.log(`Stopping container ${key}`)
       try {
         await execAsync(`docker stop ${key}`);
         await execAsync(`docker rm ${key}`);
-        await redis.del(key);
       }
       catch (e) {
         console.error(e)
       }
+      await redis.del(key);
     }
   });
 }
@@ -54,30 +53,40 @@ function bootstrap() {
     next();
   });
 
-  io.on("connection", (socket) => {
-    console.log("a user connected");
-    socket.on("disconnect", () => {
+  io.on("connection", async (socket) => {
+    const tag = socket.handshake.query.tag as string;
+
+    if (!tag) {
+      socket.disconnect();
+      return;
+    }
+
+    const port = await createContainer(tag);
+    socket.emit("containerCreated", port);
+    const contents = await getDirectory(`./tmp/${tag}`, "");
+    socket.emit("directory", contents);
+
+    socket.on("getDirectory", async (dir: string, callback) => {
+      const dirPath = `./tmp/${tag}/${dir}`;
+      const contents = await getDirectory(dirPath, dir);
+      callback(contents);
+  });
+
+    socket.on("getFile", async ({ path: filePath }: { path: string }, callback) => {
+      const fullPath = `./tmp/${tag}${filePath}`;
+      const data = await getFile(fullPath, tag);
+      callback(data);
+    })
+    socket.on("saveFile", async ({ path: filePath, content }: { path: string, content: string,tag:string }) => {
+      const fullPath =  `./tmp/${tag}${filePath}`;
+      await saveFile(fullPath, content,tag);
+  });
+
+
+    socket.on("disconnect", (socket) => {
+      console.log("user disconnected", socket);
       console.log("user disconnected");
     });
-
-    socket.on("getContainer", async (tag: string) => {
-      const containerInfo = await redis.get(tag);
-      const existingPort = JSON.parse(containerInfo || "{}").port;
-      if (existingPort) {
-        socket.emit("containerCreated", existingPort);
-        const newcontainerInfo = JSON.stringify({ port: existingPort, lastRequest: Date.now() });
-        await redis.set(tag, newcontainerInfo);
-        return;
-      }
-      const newPort = await createContainer(tag);
-      socket.emit("containerCreated", newPort);
-    })
-
-    socket.on("getDirectory", async (tag: string) => {
-      const directory = await getDirectory(tag);
-      console.log(directory)
-      socket.emit("directory", directory);
-    })
 
   });
 
