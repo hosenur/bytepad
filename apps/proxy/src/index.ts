@@ -1,6 +1,7 @@
 import http from "http"
 import proxyServer from "http-proxy";
 import { redis } from "./utils/redis";
+import { env } from "./config";
 const proxy = proxyServer.createProxyServer({});
 const server = http.createServer(async (req, res) => {
     const host = req.headers.host;
@@ -17,6 +18,6 @@ const server = http.createServer(async (req, res) => {
     }
 })
 
-server.listen(80, () => {
+server.listen(env.APP_PORT, () => {
     console.log("Proxy server is running on port 80");
 })
