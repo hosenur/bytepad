@@ -19,5 +19,5 @@ const server = http.createServer(async (req, res) => {
 })
 
 server.listen(env.APP_PORT, () => {
-    console.log("Proxy server is running on port 80");
+    console.log("Proxy server is running on port 7070");
 })
