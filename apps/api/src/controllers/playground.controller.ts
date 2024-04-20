@@ -14,6 +14,8 @@ export class PlaygroundController {
     const running = await redis.get(tag) ? true : false;
     res.json({ running });
   }
+
+  
   public async deletePlayground(req: Request, res: Response): Promise<void> {
     const { tag } = req.params;
     if (!req.auth.userId) {

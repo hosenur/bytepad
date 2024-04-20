@@ -6,6 +6,7 @@ import { Server } from "socket.io";
 import util from "util";
 import { app } from "./app";
 import { redis } from "./utils/redis";
+import { clearPlayground } from "./utils/playgroundUtils";
 const execAsync = util.promisify(exec);
 async function stopIdleContainers() {
   console.log("Checking for idle containers");
@@ -16,25 +17,14 @@ async function stopIdleContainers() {
     const { lastRequest, port } = JSON.parse(containerInfo || "{}");
     console.log(`Last request from ${key} was: ${(Date.now() - lastRequest) / 1000 / 60} minues before`);
     if (Date.now() - lastRequest > 5 * 60 * 1000) {
-      const containerExists = await checkTag(key);
-      if (!containerExists) {
-        console.log(`Container ${key} does not exist`);
-        return;
-      }
-      try {
-        await execAsync(`docker stop ${key}`);
-        await execAsync(`docker rm ${key}`);
-      } catch (e) {
-        console.error(e);
-      }
-      await redis.del(key);
+      await clearPlayground(key);
     }
   }));
 }
 
 setInterval(async () => {
   await stopIdleContainers();
-}, 10000);
+}, 60000);
 
 
 function bootstrap() {
