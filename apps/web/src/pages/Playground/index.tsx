@@ -6,6 +6,7 @@ import { Trash } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
+import _ from "lodash"; // Import lodash debounce
 import { FileExplorer } from "./FileExplorer";
 
 
@@ -24,6 +25,15 @@ export default function Playground() {
     deletePlayground(tag)
     navigate("/playgrounds")
   }
+
+  // Debounced onChange handler
+  const debouncedSaveFile = useMemo(() => _.debounce((value: string) => {
+    if (!selectedFile) {
+      return;
+    }
+    socket?.emit("saveFile", { path: selectedFile.path, content: value });
+  }, 5000), [selectedFile, socket]);
+
   useEffect(() => {
     if (!socket || !tag) {
       return;
@@ -69,19 +79,9 @@ export default function Playground() {
           language="typescript"
           theme="vs-dark"
           height={"80vh"}
-          // onChange={debounce((value) => {
-          //   if (!selectedFile) {
-          //     return;
-          //   }
-          //   console.log("cahnged")
-          //   socket?.emit("saveFile", { path: selectedFile.path, content: value });
-          // }, 1000)}
-          //the incgabge wiull debounce by 3 seconds, then fire the socket event
           onChange={(value) => {
-            if (!selectedFile) {
-              return;
-            }
-            socket?.emit("saveFile", { path: selectedFile.path, content: value });
+            // Call the debounced function
+            debouncedSaveFile(value);
           }}
           value={selectedFile?.content}
         />
@@ -94,3 +94,4 @@ export default function Playground() {
     </div>
   );
 }
+
