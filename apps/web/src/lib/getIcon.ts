@@ -25,11 +25,16 @@ export function getIcon(fileName:string) {
     cache.set("svg", BASE + "svg.svg");
     cache.set("assets", BASE + "folder-resource.svg");
     cache.set("app", BASE + "folder-app.svg");
+    cache.set("vue", BASE + "vue.svg");
+    cache.set(".next", BASE + "folder-next.svg");
+    cache.set("components", BASE + "folder-components.svg");
+    cache.set(".vscode", BASE + "folder-vscode.svg");
     cache.set("openDirectory", BASE + "folder_open.svg");
     cache.set("openDirectory", BASE + "folder_open.svg");
     cache.set("openDirectory", BASE + "folder_open.svg");
     cache.set("openDirectory", BASE + "folder_open.svg");
     cache.set("openDirectory", BASE + "folder_open.svg");
+    cache.set("openDirectory", BASE + "folder_open.svg");   
     //check if filename exists then retutn that , then check for extension
     if(fileName){
         const file = cache.get(fileName);
