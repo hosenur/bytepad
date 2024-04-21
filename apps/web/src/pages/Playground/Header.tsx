@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 export default function Header() {
     return (
-        <header className="flex h-16 w-full shrink-0 bg-black text-white items-center px-4 md:px-6 border-b">
+        <header className="flex h-16 w-full shrink-0 bg-zinc-900 text-white items-center px-4 md:px-6">
             <Link className="flex items-center gap-2 text-lg font-semibold sm:text-base" to="/">
                 <span className="sr-only">Bytepad</span>
             </Link>

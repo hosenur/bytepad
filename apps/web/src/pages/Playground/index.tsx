@@ -65,10 +65,8 @@ export default function Playground() {
 
   return (
     <div className="flex flex-col overflow-hidden max-h-[100vh] max-w-[100vw]">
-      <div className="h-[10vh]">
-        <Header />
-      </div>
-      <div className="flex max-h-[90vh] max-w-[100vw] overflow-hidden">
+      <Header />
+      <div className="flex h-full max-w-[100vw] overflow-hidden">
 
         <div className="bg-zinc-900 text-zinc-500 text-sm font-semibold min-h-screen w-2/12">
           <FileExplorer rootDir={rootDir} selectedFile={selectedFile} onSelect={onSelect} />
