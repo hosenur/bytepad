@@ -6,6 +6,7 @@ const proxy = proxyServer.createProxyServer({});
 const server = http.createServer(async (req, res) => {
     const host = req.headers.host;
     if (host === 'hosenur.cloud') {
+        console.log("Request to API")
         proxy.web(req, res, { target: 'https://www.netflix.com/helloworld' });
     }
     if (req.headers.host?.split('.')[1] === 'hosenur' && req.headers.host?.split('.').length === 3) {
@@ -14,7 +15,8 @@ const server = http.createServer(async (req, res) => {
         if (!port) {
             return;
         }
-        proxy.web(req, res, { target: 'http://10.122.0.2:' + port });
+        console.log("Request to Proxy")
+        proxy.web(req, res, { target: 'https://www.netflix.com/helloworld' });
     }
 })
 
