@@ -5,6 +5,7 @@ import { env } from "./config";
 
 const proxy = proxyServer.createProxyServer({});
 const server = http.createServer(async (req, res) => {
+    console.log("request")
     const host = req.headers.host;
     if (host === 'hosenur.cloud') {
         console.log("Request to API")
