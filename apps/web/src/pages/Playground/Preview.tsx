@@ -35,7 +35,7 @@ export default function Preview({ tag }: PreviewProps) {
 
     if (isPreviewAvailable) {
         return (
-            <div className="flex flex-col items-center justify-center h-[100dvh]">
+            <div className="flex flex-col items-center">
                 <div className="flex items-center justify-between w-full max-w-3xl px-4 py-2 bg-gray-100 rounded-t-lg dark:bg-gray-800">
                     <div className="flex items-center space-x-2">
                         <Globe className="w-5 h-5 text-gray-500 dark:text-gray-400" />

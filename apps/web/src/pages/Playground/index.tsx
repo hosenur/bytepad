@@ -75,7 +75,7 @@ export default function Playground() {
       <div className="bg-zinc-900 text-zinc-500 text-sm font-semibold min-h-screen w-2/12">
         <FileExplorer rootDir={rootDir} selectedFile={selectedFile} onSelect={onSelect} />
       </div>
-      <div className="w-9/12">
+      <div className="w-7/12">
         <Editor
           language="typescript"
           theme="vs-dark"
