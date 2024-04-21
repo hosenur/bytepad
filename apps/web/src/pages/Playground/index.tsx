@@ -1,15 +1,13 @@
-import { usePlaygrounds } from "@/hooks/usePlaygrounds";
 import { useSocket } from "@/hooks/useSocket";
 import { File, RemoteFile, Type, buildFileTree } from "@/lib/fsUtils";
 import Editor from "@monaco-editor/react";
-import { Trash } from "lucide-react";
+import _ from "lodash"; // Import lodash debounce
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
-import _ from "lodash"; // Import lodash debounce
 import { FileExplorer } from "./FileExplorer";
-import Preview from "./Preview";
 import Header from "./Header";
+import Preview from "./Preview";
 
 
 export default function Playground() {
@@ -20,13 +18,7 @@ export default function Playground() {
   }
   const [remoteFiles, setRemoteFiles] = useState<RemoteFile[]>([]);
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
-  const { deletePlayground } = usePlaygrounds()
   const socket = useSocket(tag);
-  const handleDeletePlyground = () => {
-    if (!tag) return;
-    deletePlayground(tag)
-    navigate("/playgrounds")
-  }
 
   // Debounced onChange handler
   const debouncedSaveFile = useMemo(() => _.debounce((value: string) => {
