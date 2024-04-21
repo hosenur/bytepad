@@ -6,7 +6,7 @@ dotenv.config({
 });
 
 export const env = envalid.cleanEnv(process.env, {
-  APP_HOST: envalid.str({ default: "0.0.0.0" }),
+  APP_HOST: envalid.str({ default: "10.122.16.2" }),
   APP_PORT: envalid.port({ default: 8080 }),
   DATABASE_URL: envalid.url(),
   AWS_ACCESS_KEY_ID: envalid.str(),
