@@ -10,9 +10,9 @@ export default function Preview({ tag }: PreviewProps) {
     if (!tag) return null;
 
     const [isPreviewAvailable, setIsPreviewAvailable] = useState(false);
+    const [reloadKey, setReloadKey] = useState(0); // State to trigger iframe reload
 
     useEffect(() => {
-        console.log("calling")
         const interval = setInterval(() => {
             const URL = `https://${tag}.hosenur.cloud`;
             fetch(URL)
@@ -27,11 +27,15 @@ export default function Preview({ tag }: PreviewProps) {
                 });
         }, 5000);
 
-        // Cleanup function
         return () => {
             clearInterval(interval);
         }
-    }, [tag]); // Include tag in the dependency array
+    }, [tag]);
+
+    const handleReload = () => {
+        // Increment reload key to trigger iframe reload
+        setReloadKey(prevKey => prevKey + 1);
+    };
 
     if (isPreviewAvailable) {
         return (
@@ -44,7 +48,7 @@ export default function Preview({ tag }: PreviewProps) {
                         </span>
                     </div>
                     <div className="flex items-center space-x-2">
-                        <Button size="icon" variant="ghost">
+                        <Button size="icon" variant="ghost" onClick={handleReload}>
                             <RefreshCcw className="w-5 h-5 text-gray-500 dark:text-gray-400" />
                             <span className="sr-only">Refresh</span>
                         </Button>
@@ -52,6 +56,7 @@ export default function Preview({ tag }: PreviewProps) {
                 </div>
                 <div className="w-full h-full bg-white -b-lg shadow-lg dark:bg-gray-900 overflow-hidden">
                     <iframe
+                        key={reloadKey} // Use key to trigger iframe reload
                         src={`https://${tag}.hosenur.cloud`}
                         className="w-full h-full"
                         title="Preview"
@@ -64,7 +69,6 @@ export default function Preview({ tag }: PreviewProps) {
     return (
         <div className='h-full bg-black flex items-center justify-center w-full'>
             <Loader className='w-5 h-5 text-white animate-spin' />
-
         </div>
     )
 }
