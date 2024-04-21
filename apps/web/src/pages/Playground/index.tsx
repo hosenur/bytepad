@@ -64,28 +64,31 @@ export default function Playground() {
   };
 
   return (
-    <div className="flex overflow-hidden max-h-[100vh] max-w-[100vw]">
+    <div className="flex flex-col overflow-hidden max-h-[100vh] max-w-[100vw]">
       <div className="h-[10vh]">
         <Header />
       </div>
-      <div className="bg-zinc-900 text-zinc-500 text-sm font-semibold min-h-screen w-2/12">
-        <FileExplorer rootDir={rootDir} selectedFile={selectedFile} onSelect={onSelect} />
-      </div>
-      <div className="w-6/12">
-        <Editor
-          language="typescript"
-          theme="vs-dark"
-          height={"80vh"}
-          onChange={(value) => {
-            if (!value) return;
-            // Call the debounced function
-            debouncedSaveFile(value);
-          }}
-          value={selectedFile?.content}
-        />
-      </div>
-      <div className="w-4/12">
-        <Preview tag={tag} />
+      <div className="flex max-h-[90vh] max-w-[100vw] overflow-hidden">
+
+        <div className="bg-zinc-900 text-zinc-500 text-sm font-semibold min-h-screen w-2/12">
+          <FileExplorer rootDir={rootDir} selectedFile={selectedFile} onSelect={onSelect} />
+        </div>
+        <div className="w-6/12">
+          <Editor
+            language="typescript"
+            theme="vs-dark"
+            height={"80vh"}
+            onChange={(value) => {
+              if (!value) return;
+              // Call the debounced function
+              debouncedSaveFile(value);
+            }}
+            value={selectedFile?.content}
+          />
+        </div>
+        <div className="w-4/12">
+          <Preview tag={tag} />
+        </div>
       </div>
     </div>
   );
