@@ -47,12 +47,12 @@ export default function Preview({ tag }: PreviewProps) {
                             https://{tag}.hosenur.cloud
                         </span>
                     </div>
-                    <div className="flex items-center space-x-2">
-                        <Button size="icon" variant="outline" onClick={handleReload}>
+                        <div className='flex items-center justify-center w-10 h-10'>
+
                             <RefreshCcw className="w-5 h-5 text-gray-400" />
                             <span className="sr-only">Refresh</span>
-                        </Button>
-                    </div>
+                        </div>
+
                 </div>
                 <div className="w-full h-full bg-white -b-lg shadow-lg dark:bg-gray-900 overflow-hidden">
                     <iframe
