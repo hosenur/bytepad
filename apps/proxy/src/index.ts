@@ -19,7 +19,7 @@ const server = http.createServer(async (req, res) => {
             return;
         }
         console.log("Request to Proxy")
-        proxy.web(req, res, { target: 'http://10.122.16.2/'+port });
+        proxy.web(req, res, { target: 'http://10.122.16.2:'+port });
     }
 })
 
