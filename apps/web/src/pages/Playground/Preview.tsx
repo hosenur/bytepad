@@ -40,7 +40,7 @@ export default function Preview({ tag }: PreviewProps) {
     if (isPreviewAvailable) {
         return (
             <div className="flex flex-col items-center h-full">
-                <div className="flex items-center justify-between w-full max-w-3xl px-4 py-2  rounded-t-lg bg-gray-800">
+                <div className="flex items-center justify-between w-full max-w-3xl px-4 py-2   bg-gray-800">
                     <div className="flex items-center space-x-2">
                         <Globe className="w-5 h-5  text-gray-400" />
                         <span className="text-sm font-medium  text-gray-300">
@@ -48,7 +48,7 @@ export default function Preview({ tag }: PreviewProps) {
                         </span>
                     </div>
                     <div className="flex items-center space-x-2">
-                        <Button size="icon" variant="ghost" onClick={handleReload}>
+                        <Button size="icon" variant="outline" onClick={handleReload}>
                             <RefreshCcw className="w-5 h-5 text-gray-400" />
                             <span className="sr-only">Refresh</span>
                         </Button>
