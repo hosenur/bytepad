@@ -5,13 +5,15 @@ import { env } from "./config";
 
 const proxy = proxyServer.createProxyServer({});
 const server = http.createServer(async (req, res) => {
-    console.log("request")
-    console.log(req.headers)
+    console.log("request");
+    console.log(req.headers);
     const host = req.headers.host;
+
     if (host === 'hosenur.cloud') {
-        console.log("Request to API")
+        console.log("Request to API");
         proxy.web(req, res, { target: 'http://10.122.16.2:8080' });
     }
+
     if (req.headers.host?.split('.')[1] === 'hosenur' && req.headers.host?.split('.').length === 3) {
         const tag = req.headers.host?.split('.')[0];
         const data = await redis.get(tag);
@@ -19,10 +21,10 @@ const server = http.createServer(async (req, res) => {
         if (!port) {
             return;
         }
-        console.log(tag)
-        console.log("Request to Proxy")
-        console.log("Forwarding to", "http://10.122.16.2:"+port);
-        proxy.web(req, res, { target: 'http://10.122.16.2:'+port });
+        console.log(tag);
+        console.log("Request to Proxy");
+        console.log("Forwarding to", "http://10.122.16.2:" + port);
+        proxy.web(req, res, { target: 'http://10.122.16.2:' + port });
     }
 });
 
@@ -35,6 +37,30 @@ server.on('request', (req, res) => {
         res.writeHead(200);
         res.end();
         return;
+    }
+});
+
+// Handle WebSocket upgrade
+server.on('upgrade', async(req, socket, head) => {
+    console.log("WebSocket upgrade request received");
+    const host = req.headers.host;
+
+    if (host === 'hosenur.cloud') {
+        console.log("WebSocket request to API");
+        proxy.ws(req, socket, head, { target: 'ws://10.122.16.2:8080' });
+    }
+
+    if (req.headers.host?.split('.')[1] === 'hosenur' && req.headers.host?.split('.').length === 3) {
+        const tag = req.headers.host?.split('.')[0];
+        const data = await redis.get(tag);
+        const port = JSON.parse(data || '{}').port;
+        if (!port) {
+            return;
+        }
+        console.log(tag);
+        console.log("WebSocket request to Proxy");
+        console.log("Forwarding to", "ws://10.122.16.2:" + port);
+        proxy.ws(req, socket, head, { target: 'ws://10.122.16.2:' + port });
     }
 });
 
