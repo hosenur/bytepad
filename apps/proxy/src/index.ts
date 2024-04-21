@@ -2,6 +2,7 @@ import http from "http"
 import proxyServer from "http-proxy";
 import { redis } from "./utils/redis";
 import { env } from "./config";
+
 const proxy = proxyServer.createProxyServer({});
 const server = http.createServer(async (req, res) => {
     const host = req.headers.host;
