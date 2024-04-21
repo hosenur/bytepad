@@ -14,7 +14,8 @@ const server = http.createServer(async (req, res) => {
     }
     if (req.headers.host?.split('.')[1] === 'hosenur' && req.headers.host?.split('.').length === 3) {
         const tag = req.headers.host?.split('.')[0];
-        const port = await redis.get(tag);
+        const data = await redis.get(tag);
+        const port = JSON.parse(data || '{}').port;
         if (!port) {
             return;
         }
