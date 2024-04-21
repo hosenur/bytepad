@@ -33,7 +33,7 @@ export default function Playground() {
       return;
     }
     socket?.emit("saveFile", { path: selectedFile.path, content: value });
-  }, 5000), [selectedFile, socket]);
+  }, 1500), [selectedFile, socket]);
 
   useEffect(() => {
     if (!socket || !tag) {
