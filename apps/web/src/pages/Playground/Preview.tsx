@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { Globe, RefreshCcw } from 'lucide-react';
+import { Globe, Loader, RefreshCcw } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 type PreviewProps = {
@@ -35,7 +35,7 @@ export default function Preview({ tag }: PreviewProps) {
 
     if (isPreviewAvailable) {
         return (
-            <div className="flex flex-col items-center">
+            <div className="flex flex-col items-center h-full">
                 <div className="flex items-center justify-between w-full max-w-3xl px-4 py-2 bg-gray-100 rounded-t-lg dark:bg-gray-800">
                     <div className="flex items-center space-x-2">
                         <Globe className="w-5 h-5 text-gray-500 dark:text-gray-400" />
@@ -50,7 +50,7 @@ export default function Preview({ tag }: PreviewProps) {
                         </Button>
                     </div>
                 </div>
-                <div className="w-full bg-white rounded-b-lg shadow-lg dark:bg-gray-900 overflow-hidden">
+                <div className="w-full h-full bg-white -b-lg shadow-lg dark:bg-gray-900 overflow-hidden">
                     <iframe
                         src={`https://${tag}.hosenur.cloud`}
                         className="w-full h-full"
@@ -62,7 +62,8 @@ export default function Preview({ tag }: PreviewProps) {
     }
 
     return (
-        <div className='h-full bg-black animate-pulse'>
+        <div className='h-full bg-black flex items-center justify-center w-full'>
+            <Loader className='w-10 h-10 text-white' />
 
         </div>
     )

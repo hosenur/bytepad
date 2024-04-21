@@ -75,7 +75,7 @@ export default function Playground() {
       <div className="bg-zinc-900 text-zinc-500 text-sm font-semibold min-h-screen w-2/12">
         <FileExplorer rootDir={rootDir} selectedFile={selectedFile} onSelect={onSelect} />
       </div>
-      <div className="w-7/12">
+      <div className="w-6/12">
         <Editor
           language="typescript"
           theme="vs-dark"
@@ -88,7 +88,7 @@ export default function Playground() {
           value={selectedFile?.content}
         />
       </div>
-      <div className="w-3/12">
+      <div className="w-4/12">
         <Preview tag={tag} />
       </div>
       <div
