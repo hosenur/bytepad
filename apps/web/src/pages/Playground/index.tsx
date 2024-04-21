@@ -80,6 +80,7 @@ export default function Playground() {
           theme="vs-dark"
           height={"80vh"}
           onChange={(value) => {
+            if(!value) return;
             // Call the debounced function
             debouncedSaveFile(value);
           }}
