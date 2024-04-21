@@ -1,4 +1,3 @@
-import { Button } from '@/components/ui/button';
 import { Globe, Loader, RefreshCcw } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -47,7 +46,9 @@ export default function Preview({ tag }: PreviewProps) {
                             https://{tag}.hosenur.cloud
                         </span>
                     </div>
-                        <div className='flex items-center justify-center w-10 h-10'>
+                        <div
+                            onClick={handleReload}
+                         className='flex items-center cursor-pointer justify-center w-10 h-10'>
 
                             <RefreshCcw className="w-5 h-5 text-gray-400" />
                             <span className="sr-only">Refresh</span>
