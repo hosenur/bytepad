@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import _ from "lodash"; // Import lodash debounce
 import { FileExplorer } from "./FileExplorer";
 import Preview from "./Preview";
+import Header from "./Header";
 
 
 export default function Playground() {
@@ -72,6 +73,9 @@ export default function Playground() {
 
   return (
     <div className="flex overflow-hidden max-h-[100vh] max-w-[100vw]">
+      <div className="h-[10vh]">
+        <Header />
+      </div>
       <div className="bg-zinc-900 text-zinc-500 text-sm font-semibold min-h-screen w-2/12">
         <FileExplorer rootDir={rootDir} selectedFile={selectedFile} onSelect={onSelect} />
       </div>
@@ -90,11 +94,6 @@ export default function Playground() {
       </div>
       <div className="w-4/12">
         <Preview tag={tag} />
-      </div>
-      <div
-        onClick={handleDeletePlyground}
-        className="fixed bottom-20 right-20 bg-zinc-100 rounded border border-zinc-200 p-2.5 cursor-pointer">
-        <Trash className="w-8 h-8" />
       </div>
     </div>
   );
