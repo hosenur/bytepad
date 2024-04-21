@@ -33,6 +33,7 @@ function bootstrap() {
     cors: {
       origin: "https://www.bytepad.pro",
     },
+    transports: ["websocket", "polling"]
   });
 
   io.use((socket, next) => {
