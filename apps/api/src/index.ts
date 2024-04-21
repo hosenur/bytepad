@@ -74,6 +74,7 @@ function bootstrap() {
       const data = await getFile(fullPath, tag);
       callback(data);
     })
+
     socket.on("saveFile", async ({ path: filePath, content }: { path: string, content: string, tag: string }) => {
       const fullPath = `./tmp/${tag}${filePath}`;
       await saveFile(fullPath, content, tag);

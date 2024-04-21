@@ -51,7 +51,9 @@ export const getDirectory = (dir: string, baseDir: string): Promise<File[]> => {
 }
 
 export const getFile = async (pathToFile: string, tag: string): Promise<string> => { // Added return type Promise<string>
-    await redis.set(tag, JSON.stringify({ port: 3000, lastRequest: Date.now() }));
+    const prevRedis = JSON.parse(await redis.get(tag) || '{}');
+    const updateRedis = { ...prevRedis, lastRequest: Date.now() };
+    await redis.set(tag, JSON.stringify(updateRedis));
     return new Promise((resolve, reject) => {
         fs.readFile(pathToFile, 'utf8', (err: NodeJS.ErrnoException | null, data: string) => { // Added types for err and data parameters
             if (err) {
