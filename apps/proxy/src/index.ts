@@ -7,7 +7,7 @@ const server = http.createServer(async (req, res) => {
     const host = req.headers.host;
     if (host === 'hosenur.cloud') {
         console.log("Request to API")
-        proxy.web(req, res, { target: 'http://10.122.16.2' });
+        proxy.web(req, res, { target: 'http://10.122.16.2:8080' });
     }
     if (req.headers.host?.split('.')[1] === 'hosenur' && req.headers.host?.split('.').length === 3) {
         const tag = req.headers.host?.split('.')[0];
