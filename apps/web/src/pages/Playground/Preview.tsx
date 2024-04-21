@@ -63,7 +63,7 @@ export default function Preview({ tag }: PreviewProps) {
 
     return (
         <div className='h-full bg-black flex items-center justify-center w-full'>
-            <Loader className='w-10 h-10 text-white' />
+            <Loader className='w-5 h-5 text-white animate-spin' />
 
         </div>
     )
