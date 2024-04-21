@@ -16,7 +16,7 @@ async function stopIdleContainers() {
     const containerInfo = await redis.get(key);
     const { lastRequest, port } = JSON.parse(containerInfo || "{}");
     console.log(`Last request from ${key} was: ${(Date.now() - lastRequest) / 1000 / 60} minues before`);
-    if (Date.now() - lastRequest > 5 * 60 * 1000) {
+    if (Date.now() - lastRequest > 20 * 60 * 1000) {
       await clearPlayground(key);
     }
   }));
