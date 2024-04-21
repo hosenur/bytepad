@@ -1,4 +1,4 @@
-import http from "http"
+import http from "http";
 import proxyServer from "http-proxy";
 import { redis } from "./utils/redis";
 import { env } from "./config";
@@ -21,11 +21,23 @@ const server = http.createServer(async (req, res) => {
         }
         console.log(tag)
         console.log("Request to Proxy")
-        console.log("Fowarding to" , "http://10.122.16.2:"+port);
+        console.log("Forwarding to", "http://10.122.16.2:"+port);
         proxy.web(req, res, { target: 'http://10.122.16.2:'+port });
     }
-})
+});
+
+// Middleware to enable CORS
+server.on('request', (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*'); // Change '*' to specific origins if needed
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    if (req.method === 'OPTIONS') {
+        res.writeHead(200);
+        res.end();
+        return;
+    }
+});
 
 server.listen(env.APP_PORT, () => {
-    console.log("Proxy server is running on port 7070");
-})
+    console.log("Proxy server is running on port", env.APP_PORT);
+});
