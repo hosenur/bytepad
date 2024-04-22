@@ -20,6 +20,39 @@ export class PlaygroundController {
     const port = JSON.parse(data || "{}").port;
     res.json({ port });
   }
+  public async addUserToPlayground(req: Request, res: Response): Promise<void> {
+    const { tag, email } = req.body;
+    if (!req.auth.userId) {
+      res.status(401).json({ message: "Unauthorized" });
+      return;
+    }
+    const playground = await prisma.playground.findFirst({
+      where: {
+        tag,
+        PlaygroundMember: {
+          some: {
+            userId: req.auth.userId,
+            role: "OWNER"
+          }
+        }
+      }
+    });
+    if (!playground) {
+      res.status(404).json({ message: "Playground not found" });
+      return;
+    }
+    const token = uuid()
+    const invitation = await prisma.invitations.create({
+      data: {
+        email,
+        token,
+        playgroundId: playground.id
+      }
+    });
+    //send mail
+
+  }
+  public async acceptInvitation(req: Request, res: Response): Promise<void> { }
 
 
   public async deletePlayground(req: Request, res: Response): Promise<void> {

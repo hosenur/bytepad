@@ -16,6 +16,7 @@ model Playground {
   owner            String
   createdAt        DateTime           @default(now())
   PlaygroundMember PlaygroundMember[]
+  Invitations      Invitations[]
 }
 
 model PlaygroundMember {
@@ -25,6 +26,16 @@ model PlaygroundMember {
   userId       String
   role         Role
   createdAt    DateTime   @default(now())
+}
+
+model Invitations {
+  id           String     @id @default(cuid())
+  playground   Playground @relation(fields: [playgroundId], references: [id])
+  playgroundId String
+  email        String
+  createdAt    DateTime   @default(now())
+  token        String
+  expired      Boolean    @default(false)
 }
 
 datasource db {
