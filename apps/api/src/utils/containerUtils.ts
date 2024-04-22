@@ -4,6 +4,7 @@ import util from 'util';
 import { redis } from './redis';
 import { clearPlayground } from './playgroundUtils';
 import { s3 } from './s3';
+import { Socket } from 'socket.io';
 
 interface File {
     type: "file" | "dir";
@@ -74,6 +75,27 @@ export const saveFile = async (file: string, content: string, tag: string): Prom
             }
             resolve();
         });
+    });
+}
+export function executeCommand(command: string, socket: Socket, tag: string) {
+    const dockerCommand = `docker exec ${tag} sh -c '${command}'`;
+
+    const child = exec(dockerCommand);
+
+    child.stdout?.on('data', (data) => {
+        socket.emit('terminalOutput', data.toString());
+    });
+
+    child.stderr?.on('data', (data) => {
+        socket.emit('terminalOutput', data.toString());
+    });
+
+    child.on('error', (error) => {
+        socket.emit('terminalOutput', `Error executing command: ${error.message}`);
+    });
+
+    child.on('exit', (code, signal) => {
+        socket.emit('terminalOutput', `Command exited with code ${code} and signal ${signal}`);
     });
 }
 

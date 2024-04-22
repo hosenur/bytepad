@@ -1,4 +1,4 @@
-import { createContainer, getDirectory, getFile, saveFile, syncFile } from "@/utils/containerUtils";
+import { createContainer, executeCommand, getDirectory, getFile, saveFile, syncFile } from "@/utils/containerUtils";
 import { ClerkExpressWithAuth } from "@clerk/clerk-sdk-node";
 import * as http from "http";
 import { Server } from "socket.io";
@@ -76,6 +76,11 @@ function bootstrap() {
       const fullPath = `./tmp/${tag}${filePath}`;
       await saveFile(fullPath, content, tag);
       await syncFile(tag, fullPath, content);
+    });
+
+    socket.on('command', (command, tag) => {
+      console.log('Received command:', command);
+      executeCommand(command, socket, tag);
     });
 
 

@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { FileExplorer } from "./FileExplorer";
 import Header from "./Header";
 import Preview from "./Preview";
+import { TerminalComponent } from "./Terminal";
 
 
 export default function Playground() {
@@ -84,6 +85,7 @@ export default function Playground() {
             }}
             value={selectedFile?.content}
           />
+          <TerminalComponent socket={socket} tag={tag} />
         </div>
         <div className="w-4/12">
           <Preview tag={tag} />

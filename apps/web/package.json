@@ -38,7 +38,9 @@
     "sonner": "^1.4.41",
     "swr": "^2.2.5",
     "tailwind-merge": "^2.2.2",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "xterm": "^5.3.0",
+    "xterm-addon-fit": "^0.8.0"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.0",
