@@ -28,9 +28,18 @@ const server = http.createServer(async (req, res) => {
     }
 });
 
-// Middleware to enable CORS
+// Middleware to enable CORS for https://www.bytepad.pro
 server.on('request', (req, res) => {
-    res.setHeader('Access-Control-Allow-Origin', 'www.bytepad.pro'); // Change '*' to specific origins if needed
+    const allowedOrigins = ['https://www.bytepad.pro']; // Define allowed origins
+    const origin = req.headers.origin;
+    if (!origin) {
+        return;
+    }
+
+    if (allowedOrigins.includes(origin)) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+    }
+
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     if (req.method === 'OPTIONS') {
@@ -41,7 +50,7 @@ server.on('request', (req, res) => {
 });
 
 // Handle WebSocket upgrade
-server.on('upgrade', async(req, socket, head) => {
+server.on('upgrade', async (req, socket, head) => {
     console.log("WebSocket upgrade request received");
     const host = req.headers.host;
 
