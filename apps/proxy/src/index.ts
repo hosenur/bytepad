@@ -30,7 +30,7 @@ const server = http.createServer(async (req, res) => {
 
 // Middleware to enable CORS
 server.on('request', (req, res) => {
-    res.setHeader('Access-Control-Allow-Origin', '*'); // Change '*' to specific origins if needed
+    res.setHeader('Access-Control-Allow-Origin', 'www.bytepad.pro'); // Change '*' to specific origins if needed
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     if (req.method === 'OPTIONS') {
