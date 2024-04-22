@@ -14,7 +14,7 @@ declare global {
 }
 app.use(
     cors({
-        origin: "www.bytepad.pro",
+        origin: "https://www.bytepad.pro",
     })
 );
 app.all(
