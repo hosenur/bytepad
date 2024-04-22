@@ -13,7 +13,7 @@ export default function Preview({ tag }: PreviewProps) {
 
     useEffect(() => {
         const interval = setInterval(() => {
-            const URL = `https://${tag}.bytepad.pro.cloud`;
+            const URL = `https://${tag}.bytepad.pro`;
             fetch(URL)
                 .then((res) => {
                     if (res.status === 200) {
