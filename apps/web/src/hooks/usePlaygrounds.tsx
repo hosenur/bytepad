@@ -24,19 +24,18 @@ const usePlaygrounds = () => {
             isLoading
         }
     }
-    const handleDelete = async (tag: string) => {
+
+    const deletePlayground = async (tag: string) => {
         const url = useURL(`playgrounds/${tag}`);
         toast.promise(AuthAxios.delete(url), {
             loading: 'Deleting playground',
-            success: 'Playground deleted',
+            success: () => {
+                mutate(url);
+                navigate('/playgrounds');
+                return 'Playground deleted';
+            },
             error: 'Error'
         });
-    }
-    const deletePlayground = async (tag: string) => {
-        handleDelete(tag).then(() => {
-            mutate(useURL("playgrounds"));
-            navigate("/playgrounds");
-        })
     }
     const createPlayground = (framework: string) => {
         const url = useURL("playgrounds");
