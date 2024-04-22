@@ -1,4 +1,4 @@
-import { createContainer, getDirectory, getFile, saveFile, saveToS3 } from "@/utils/containerUtils";
+import { createContainer, getDirectory, getFile, saveFile, syncFile } from "@/utils/containerUtils";
 import { ClerkExpressWithAuth } from "@clerk/clerk-sdk-node";
 import * as http from "http";
 import { Server } from "socket.io";
@@ -75,7 +75,7 @@ function bootstrap() {
     socket.on("saveFile", async ({ path: filePath, content }: { path: string, content: string, tag: string }) => {
       const fullPath = `./tmp/${tag}${filePath}`;
       await saveFile(fullPath, content, tag);
-      await saveToS3(tag, fullPath, content);
+      await syncFile(tag, fullPath, content);
     });
 
 

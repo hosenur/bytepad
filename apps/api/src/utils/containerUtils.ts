@@ -77,7 +77,7 @@ export const saveFile = async (file: string, content: string, tag: string): Prom
     });
 }
 
-export const saveToS3 = async (tag: string, filePath: string, content: string): Promise<void> => {
+export const syncFile = async (tag: string, filePath: string, content: string): Promise<void> => {
     const params = {
         Bucket: "bytepad",
         Key: `${tag}${filePath}`,
