@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { usePlaygrounds } from '@/hooks/usePlaygrounds'
 import { Globe, Trash } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 export default function Header({ tag }: { tag: string | undefined }) {
     const { deletePlayground } = usePlaygrounds()
@@ -11,7 +12,10 @@ export default function Header({ tag }: { tag: string | undefined }) {
     }
     return (
         <header className='bg-zinc-900 w-full text-white border-b border-zinc-800 h-16 flex items-center justify-center px-5'>
-            <div className='mr-auto font-black font-mono uppercase'>Bytepad</div>
+            <Link to='/'>
+
+                <div className='mr-auto font-black font-mono uppercase'>Bytepad</div>
+            </Link>
             <div className='flex gap-2 items-center text-zinc-500'>
                 <Globe className='w-4 h-4 text-gray-400' />
                 <span className='text-sm font-medium text-gray-300'>https://{tag}.bytepad.pro</span>
