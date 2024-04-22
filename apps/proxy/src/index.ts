@@ -9,7 +9,7 @@ const server = http.createServer(async (req, res) => {
     console.log(req.headers);
     const host = req.headers.host;
 
-    if (host === 'api.nytepad.pro') {
+    if (host === 'api.bytepad.pro') {
         console.log("Request to API");
         proxy.web(req, res, { target: 'http://10.122.16.2:8080' });
     }
