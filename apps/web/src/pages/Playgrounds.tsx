@@ -148,7 +148,7 @@ export default function Playgrounds() {
           <div className="flex flex-col gap-2.5">
             <h1 className="text-lg font-semibold md:text-2xl">Playground Templates</h1>
 
-            <div className="grid grid-cols-3 md:grid-cols-5 gap-5 ">
+            <div className="flex flex-wrap gap-5">
               {
                 playgroundTypes.map((playground) => (
                   <PlaygroundTemplate key={playground.id} playground={playground} />

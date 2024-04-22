@@ -20,5 +20,7 @@ export enum FrameworkType {
     REACT = "REACT",
     VUE = "VUE",
     NEXTAPP = "NEXTAPP",
-    NEXTPAGE = "NEXTPAGE"
+    NEXTPAGE = "NEXTPAGE",
+    NUXT = "NUXT",
+    SVELTE = "SVELTE",
 }

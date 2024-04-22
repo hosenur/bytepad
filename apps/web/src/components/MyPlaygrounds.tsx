@@ -12,7 +12,7 @@ export default function MyPlaygrounds() {
     return (
         <div className="flex gap-2.5 flex-col">
             <h1 className="text-lg font-semibold md:text-2xl">My Playgrounds</h1>
-            <div className="grid grid-cols-3 md:grid-cols-5 gap-5 ">
+            <div className="flex flex-wrap gap-5">
                 {
                     data?.map((playground: PlaygroundType) => (
                         <PlaygroundCard key={playground.id} playground={playground} />

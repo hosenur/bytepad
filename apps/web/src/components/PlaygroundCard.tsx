@@ -9,7 +9,7 @@ export default function PlaygroundCard({ playground }: { playground: PlaygroundT
             onClick={() => {
                 navigate(`/playground/${playground.tag}`)
             }}
-            className='bg-zinc-50 border border-zinc-100 h-24 shadow rounded p-2.5 flex gap-5 cursor-pointer hover:shadow-md transition-all ease-in-out'>
+            className='bg-zinc-50 border border-zinc-100 h-24 w-80 shadow rounded p-2.5 flex gap-5 cursor-pointer hover:shadow-md transition-all ease-in-out'>
             <div className='items-center justify-center flex w-15'>
 
                 <img src={getImage(playground.framework)} className='w-10' alt="" />

@@ -31,6 +31,7 @@ const usePlaygrounds = () => {
             success: 'Playground deleted',
             error: 'Error'
         });
+        navigate("/playgrounds");
         mutate("/playgrounds")
     }
     const createPlayground = (framework: string) => {

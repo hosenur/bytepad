@@ -11,6 +11,7 @@ import Preview from "./Preview";
 
 
 export default function Playground() {
+  
   const { tag } = useParams();
   const navigate = useNavigate();
   if (!tag) {
@@ -65,7 +66,7 @@ export default function Playground() {
 
   return (
     <div className="flex flex-col overflow-hidden max-h-[100vh] max-w-[100vw]">
-      <Header />
+      <Header tag={tag} />
       <div className="flex h-full max-w-[100vw] overflow-hidden">
 
         <div className="bg-zinc-900 text-zinc-500 text-sm font-semibold min-h-screen w-2/12">
@@ -73,7 +74,7 @@ export default function Playground() {
         </div>
         <div className="w-6/12">
           <Editor
-            language="typescript"
+            language="javascriptreact"
             theme="vs-dark"
             height={"80vh"}
             onChange={(value) => {
