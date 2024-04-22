@@ -13,7 +13,7 @@ export default function Preview({ tag }: PreviewProps) {
 
     useEffect(() => {
         const interval = setInterval(() => {
-            const URL = `https://${tag}.hosenur.cloud`;
+            const URL = `https://${tag}.bytepad.pro.cloud`;
             fetch(URL)
                 .then((res) => {
                     if (res.status === 200) {
@@ -58,7 +58,7 @@ export default function Preview({ tag }: PreviewProps) {
                 <div className="w-full h-full bg-white -b-lg shadow-lg dark:bg-gray-900 overflow-hidden">
                     <iframe
                         key={reloadKey} // Use key to trigger iframe reload
-                        src={`https://${tag}.hosenur.cloud`}
+                        src={`https://${tag}.bytepad.pro`}
                         className="w-full h-full"
                         title="Preview"
                     />
