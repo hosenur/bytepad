@@ -1,13 +1,10 @@
-import { checkTag, createContainer, getDirectory, getFile, saveFile } from "@/utils/containerUtils";
+import { createContainer, getDirectory, getFile, saveFile, saveToS3 } from "@/utils/containerUtils";
 import { ClerkExpressWithAuth } from "@clerk/clerk-sdk-node";
-import { exec } from "child_process";
 import * as http from "http";
 import { Server } from "socket.io";
-import util from "util";
 import { app } from "./app";
-import { redis } from "./utils/redis";
 import { clearPlayground } from "./utils/playgroundUtils";
-const execAsync = util.promisify(exec);
+import { redis } from "./utils/redis";
 async function stopIdleContainers() {
   console.log("Checking for idle containers");
   const keys = await redis.keys("*");
@@ -78,6 +75,7 @@ function bootstrap() {
     socket.on("saveFile", async ({ path: filePath, content }: { path: string, content: string, tag: string }) => {
       const fullPath = `./tmp/${tag}${filePath}`;
       await saveFile(fullPath, content, tag);
+      await saveToS3(tag, fullPath, content);
     });
 
 

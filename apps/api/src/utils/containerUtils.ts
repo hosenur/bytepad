@@ -3,6 +3,7 @@ import fs, { Dirent } from 'fs-extra'; // Added type Dirent
 import util from 'util';
 import { redis } from './redis';
 import { clearPlayground } from './playgroundUtils';
+import { s3 } from './s3';
 
 interface File {
     type: "file" | "dir";
@@ -71,19 +72,20 @@ export const saveFile = async (file: string, content: string, tag: string): Prom
             if (err) {
                 return reject(err);
             }
-            syncFolderToS3(tag).then(() => {
-                resolve();
-            })
+            resolve();
         });
     });
 }
 
-// Funciton to Sync Local Folder to S3
-function syncFolderToS3(tag: string) { // Added return type Promise<void>
-    //also exclude .next  and node_modules
-    return execAsync(`aws s3 sync ./tmp/${tag} s3://bytepad/playgrounds/${tag} --exclude ".next/*" --exclude "node_modules/* --exclude ".nuxt/*"`);
-}
+export const saveToS3 = async (tag: string, filePath: string, content: string): Promise<void> => {
+    const params = {
+        Bucket: "bytepad",
+        Key: `${tag}${filePath}`,
+        Body: content
+    }
 
+    await s3.putObject(params).promise()
+}
 // Function to check if a docker with  a tag exists and return true or false asynchrnously
 export function checkTag(tag: string) {
     return new Promise((resolve, reject) => {
