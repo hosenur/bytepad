@@ -48,6 +48,7 @@ enum FrameworkType {
   VUE
   NEXTAPP
   NEXTPAGE
+  NUXT
 }
 
 enum Role {
