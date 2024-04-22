@@ -78,6 +78,9 @@ export const saveFile = async (file: string, content: string, tag: string): Prom
 }
 
 export const syncFile = async (tag: string, filePath: string, content: string): Promise<void> => {
+    if (filePath.includes("node_modules") || filePath.includes(".next") || filePath.includes(".nuxt")) {
+        return;
+    }
     const params = {
         Bucket: "bytepad",
         Key: `${tag}${filePath}`,
