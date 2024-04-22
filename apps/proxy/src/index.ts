@@ -9,12 +9,12 @@ const server = http.createServer(async (req, res) => {
     console.log(req.headers);
     const host = req.headers.host;
 
-    if (host === 'hosenur.cloud') {
+    if (host === 'api.nytepad.pro') {
         console.log("Request to API");
         proxy.web(req, res, { target: 'http://10.122.16.2:8080' });
     }
 
-    if (req.headers.host?.split('.')[1] === 'hosenur' && req.headers.host?.split('.').length === 3) {
+    if (req.headers.host?.split('.')[1] === 'bytepad' && req.headers.host?.split('.').length === 3 && req.headers.host?.split('.')[0] !== 'api') {
         const tag = req.headers.host?.split('.')[0];
         const data = await redis.get(tag);
         const port = JSON.parse(data || '{}').port;
@@ -45,12 +45,12 @@ server.on('upgrade', async(req, socket, head) => {
     console.log("WebSocket upgrade request received");
     const host = req.headers.host;
 
-    if (host === 'hosenur.cloud') {
+    if (host === 'api.bytepad.pro') {
         console.log("WebSocket request to API");
         proxy.ws(req, socket, head, { target: 'ws://10.122.16.2:8080' });
     }
 
-    if (req.headers.host?.split('.')[1] === 'hosenur' && req.headers.host?.split('.').length === 3) {
+    if (req.headers.host?.split('.')[1] === 'bytepad' && req.headers.host?.split('.').length === 3 && req.headers.host?.split('.')[0] !== 'api') {
         const tag = req.headers.host?.split('.')[0];
         const data = await redis.get(tag);
         const port = JSON.parse(data || '{}').port;
