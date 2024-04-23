@@ -22,7 +22,7 @@ export default function Terminal({ tag }: { tag: string | undefined }) {
                 cursor: '#00FF00',
             },
         });
-        const socket = new WebSocket(`ws://api.bytepad.pro/containers/${tag}/attach/ws?stream=1&stdout=1&stdin=1&logs=1 HTTP/1.1`)
+        const socket = new WebSocket(`wss://api.bytepad.pro/containers/${tag}/attach/ws?stream=1&stdout=1&stdin=1&logs=1`);
         const attachAddon = new AttachAddon(socket);
         term.loadAddon(attachAddon);
         term.loadAddon(fitAddon);
