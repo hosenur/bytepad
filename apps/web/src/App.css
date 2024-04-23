@@ -88,6 +88,7 @@
 
 .terminal-container {
   background-color: #000000;
+  font-family: monospace!important;
 }
 
 .terminal-container > div {
