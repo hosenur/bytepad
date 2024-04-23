@@ -21,7 +21,7 @@ export default function Terminal({ tag, container, previewStatus }: { tag: strin
                 cursor: '#00FF00',
             },
         });
-
+        term.write('\x1b[34mBytepad Web Shell $$ \x1b[0m');
         const socket = new WebSocket(`wss://terminal.bytepad.pro/containers/${tag}/attach/ws?stream=1&stdout=1&stdin=1&logs=1`);
         const attachAddon = new AttachAddon(socket);
         term.loadAddon(attachAddon);
