@@ -38,7 +38,7 @@ export default function Terminal({ tag, container, previewStatus }: { tag: strin
             term.dispose();
         }
 
-    }, [terminalRef, tag, container])
+    }, [terminalRef, tag, container, previewStatus])
     return (
         <div className='font-mono terminal-container  w-full h-full' ref={terminalRef}>
         </div>
