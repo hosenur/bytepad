@@ -23,15 +23,13 @@ export default function Terminal({ tag, container, previewStatus }: { tag: strin
         });
 
         const socket = new WebSocket(`wss://terminal.bytepad.pro/containers/${tag}/attach/ws?stream=1&stdout=1&stdin=1&logs=1`);
-        socket.addEventListener('open', () => {
-            const attachAddon = new AttachAddon(socket);
-            term.loadAddon(attachAddon);
-            term.loadAddon(fitAddon);
-            term.open(terminalRef.current!);
-            fitAddon.fit();
-            term.focus();
-            
-        });
+        const attachAddon = new AttachAddon(socket);
+        term.loadAddon(attachAddon);
+        term.loadAddon(fitAddon);
+        term.open(terminalRef.current!);
+        fitAddon.fit();
+        term.focus();
+
 
         return () => {
             term.dispose();
