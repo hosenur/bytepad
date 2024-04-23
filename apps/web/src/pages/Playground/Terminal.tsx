@@ -34,7 +34,9 @@ export default function Terminal({ tag, container }: { tag: string | undefined ,
 
     }, [terminalRef, container, tag])
     return (
+        <div className='terminal-container'>
         <div ref={terminalRef}>
+        </div>
         </div>
     )
 }
