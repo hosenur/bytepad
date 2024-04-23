@@ -34,7 +34,7 @@ export const createContainer = async (tag: string): Promise<number | void> => { 
 
     const port = getRandomPort();
     await execAsync(`mkdir -p ./tmp/${tag} && aws s3 cp s3://bytepad/playgrounds/${tag} ./tmp/${tag} --recursive`);
-    await execAsync(`docker run -d  -i -t --name ${tag} -v ./tmp/${tag}:/app -p ${port}:3000 bytepad /bin/bash`);
+    await execAsync(`docker run -d  -i -t --name ${tag} -v ./tmp/${tag}:/app -p ${port}:3000 oven/bun /bin/bash`);
     await redis.set(tag, JSON.stringify({ port, lastRequest: Date.now() }));
     console.log(tag, " running on port ", port);
     return port;
