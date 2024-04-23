@@ -5,7 +5,6 @@ import { env } from "./config";
 
 const proxy = proxyServer.createProxyServer({});
 const server = http.createServer(async (req, res) => {
-    console.log("request");
     console.log(req.headers);
     const host = req.headers.host;
 
@@ -17,8 +16,6 @@ const server = http.createServer(async (req, res) => {
         console.log("WebSocket request to Terminal");
         proxy.ws(req, res, { target: 'ws://10.122.16.2:7070' });
     }
-
-
 
     if (req.headers.host?.split('.')[1] === 'bytepad' && req.headers.host?.split('.').length === 3 && req.headers.host?.split('.')[0] !== 'api') {
         const tag = req.headers.host?.split('.')[0];
