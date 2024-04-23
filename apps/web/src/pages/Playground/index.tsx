@@ -87,7 +87,7 @@ export default function Playground() {
             }}
             value={selectedFile?.content}
           />
-          <div className="text-white">
+          <div className="text-white h-full w-full border border-zinc-800">
 
           <TerminalComponent container={containerStatus} tag={tag} />
           </div>

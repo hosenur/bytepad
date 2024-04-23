@@ -7,7 +7,7 @@ const fitAddon = new FitAddon();
 export default function Terminal({ tag, container }: { tag: string | undefined , container: boolean}) {
     const terminalRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
-        if (!terminalRef.current || !tag || !container ) return;
+        if (!terminalRef || !tag || !container) return;
         const term = new XTerm({
             convertEol: true,
             cols: 100,
@@ -22,20 +22,25 @@ export default function Terminal({ tag, container }: { tag: string | undefined ,
                 cursor: '#00FF00',
             },
         });
+
         const socket = new WebSocket(`wss://terminal.bytepad.pro/containers/${tag}/attach/ws?stream=1&stdout=1&stdin=1&logs=1`);
-        const attachAddon = new AttachAddon(socket);
-        term.loadAddon(attachAddon);
-        term.loadAddon(fitAddon);
-        term.open(terminalRef.current);
+        term.clear();
+        term.writeln("Connecting to terminal...");
+        
+        socket.addEventListener('open', () => {
+            const attachAddon = new AttachAddon(socket);
+            term.loadAddon(attachAddon);
+            term.loadAddon(fitAddon);
+            term.open(terminalRef.current!);
+        });
+
         return () => {
             term.dispose();
         }
 
-    }, [terminalRef, container, tag])
+    }, [terminalRef, tag,container])
     return (
-        <div className='terminal-container'>
-        <div className='font-mono' ref={terminalRef}>
-        </div>
+        <div className='font-mono terminal-container  w-full h-full' ref={terminalRef}>
         </div>
     )
 }
