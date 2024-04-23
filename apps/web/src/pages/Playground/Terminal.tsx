@@ -13,7 +13,7 @@ export default function Terminal({ tag, container }: { tag: string | undefined ,
             cols: 100,
             cursorStyle: 'underline',
             cursorBlink: true,
-            fontFamily: 'Courier New',
+            fontFamily: 'monospace',
             fontSize: 14,
             fontWeight: 'bold',
             theme: {
