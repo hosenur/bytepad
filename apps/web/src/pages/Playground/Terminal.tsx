@@ -15,7 +15,7 @@ export default function Terminal({ tag, container }: { tag: string | undefined ,
             cursorBlink: true,
             fontFamily: 'monospace',
             fontSize: 14,
-            fontWeight: 'bold',
+            fontWeight: '600',
             theme: {
                 background: '#000000',
                 foreground: '#FFFFFF',
