@@ -4,10 +4,10 @@ import { FitAddon } from '@xterm/addon-fit';
 import { AttachAddon } from "@xterm/addon-attach";
 const fitAddon = new FitAddon();
 
-export default function Terminal({ tag }: { tag: string | undefined }) {
+export default function Terminal({ tag, container }: { tag: string | undefined , container: boolean}) {
     const terminalRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
-        if (!terminalRef.current || !tag) return;
+        if (!terminalRef.current || !tag || !container ) return;
         const term = new XTerm({
             convertEol: true,
             cols: 100,
@@ -31,7 +31,7 @@ export default function Terminal({ tag }: { tag: string | undefined }) {
             term.dispose();
         }
 
-    }, [terminalRef])
+    }, [terminalRef, container, tag])
     return (
         <div ref={terminalRef}>
         </div>

@@ -20,6 +20,7 @@ export default function Playground() {
   }
   const [remoteFiles, setRemoteFiles] = useState<RemoteFile[]>([]);
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
+  const [containerStatus, setContainerStatus] = useState<boolean>(false);
   const socket = useSocket(tag);
 
   // Debounced onChange handler
@@ -35,6 +36,7 @@ export default function Playground() {
       return;
     }
     socket.on("containerCreated", () => {
+      setContainerStatus(true);
       toast.success("Connected to container");
     });
     socket.on("directory", (directory) => {
@@ -87,7 +89,7 @@ export default function Playground() {
           />
           <div className="text-white">
 
-          <TerminalComponent tag={tag} />
+          <TerminalComponent container={containerStatus} tag={tag} />
           </div>
         </div>
         <div className="w-4/12">
