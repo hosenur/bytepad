@@ -1,7 +1,6 @@
 import { Terminal as XTerm } from '@xterm/xterm';
 import { useEffect, useRef } from 'react';
 import { FitAddon } from '@xterm/addon-fit';
-import "./Terminal.module.css"
 import { AttachAddon } from "@xterm/addon-attach";
 const fitAddon = new FitAddon();
 
