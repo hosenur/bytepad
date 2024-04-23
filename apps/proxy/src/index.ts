@@ -58,6 +58,10 @@ server.on('upgrade', async (req, socket, head) => {
         console.log("WebSocket request to API");
         proxy.ws(req, socket, head, { target: 'ws://10.122.16.2:8080' });
     }
+    if (host === "terminal.bytepad.pro") {
+        console.log("WebSocket request to Terminal");
+        proxy.ws(req, socket, head, { target: 'ws://10.122.16.2:7070' });
+    }
 
     if (req.headers.host?.split('.')[1] === 'bytepad' && req.headers.host?.split('.').length === 3 && req.headers.host?.split('.')[0] !== 'api') {
         const tag = req.headers.host?.split('.')[0];
