@@ -27,6 +27,7 @@ export default function Terminal({ tag, container, previewStatus }: { tag: strin
         term.loadAddon(attachAddon);
         term.loadAddon(fitAddon);
         term.open(terminalRef.current!);
+        term.clear();
         fitAddon.fit();
         term.focus();
 
