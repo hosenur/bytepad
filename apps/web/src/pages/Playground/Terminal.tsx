@@ -10,14 +10,13 @@ export default function Terminal({ tag, container, previewStatus }: { tag: strin
         if (!terminalRef || !tag || !container || !previewStatus) return;
         const term = new XTerm({
             convertEol: true,
-            cols: 100,
             cursorStyle: 'underline',
             cursorBlink: true,
             fontFamily: 'monospace',
             fontSize: 14,
             fontWeight: '600',
             theme: {
-                background: '#000000',
+                background: '#2b2b2b',
                 foreground: '#FFFFFF',
                 cursor: '#00FF00',
             },
