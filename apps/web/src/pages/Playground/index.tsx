@@ -12,7 +12,7 @@ import TerminalComponent from "./Terminal";
 
 
 export default function Playground() {
-  
+
   const { tag } = useParams();
   const navigate = useNavigate();
   if (!tag) {
@@ -21,6 +21,7 @@ export default function Playground() {
   const [remoteFiles, setRemoteFiles] = useState<RemoteFile[]>([]);
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
   const [containerStatus, setContainerStatus] = useState<boolean>(false);
+  const [previewStatus, setPreviewStatus] = useState<boolean>(false);
   const socket = useSocket(tag);
 
   // Debounced onChange handler
@@ -89,11 +90,16 @@ export default function Playground() {
           />
           <div className="text-white h-full w-full border border-zinc-800">
 
-          <TerminalComponent container={containerStatus} tag={tag} />
+            <TerminalComponent
+              previewStatus={previewStatus}
+              container={containerStatus} tag={tag} />
           </div>
         </div>
         <div className="w-4/12">
-          <Preview tag={tag} />
+          <Preview
+            setPreviewStatus={setPreviewStatus}
+            previewStatus={previewStatus}
+            tag={tag} />
         </div>
       </div>
     </div>

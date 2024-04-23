@@ -3,12 +3,19 @@ import { useEffect, useState } from 'react';
 
 type PreviewProps = {
     tag: string | undefined;
+    previewStatus: boolean;
+    setPreviewStatus: (status: boolean) => void;
 }
 
-export default function Preview({ tag }: PreviewProps) {
+export default function Preview({ 
+    tag ,
+    previewStatus,
+    setPreviewStatus
+
+
+}: PreviewProps) {
     if (!tag) return null;
 
-    const [isPreviewAvailable, setIsPreviewAvailable] = useState(false);
     const [reloadKey, setReloadKey] = useState(0); // State to trigger iframe reload
 
     useEffect(() => {
@@ -18,7 +25,7 @@ export default function Preview({ tag }: PreviewProps) {
                 .then((res) => {
                     if (res.status === 200) {
                         clearInterval(interval);
-                        setIsPreviewAvailable(true);
+                        setPreviewStatus(true);
                     }
                 })
                 .catch((err) => {
@@ -36,7 +43,7 @@ export default function Preview({ tag }: PreviewProps) {
         setReloadKey(prevKey => prevKey + 1);
     };
 
-    if (isPreviewAvailable) {
+    if (previewStatus) {
         return (
             <div className="flex flex-col items-center h-full">
                 <div className="flex items-center justify-between w-full max-w-3xl px-4 py-2   bg-zinc-900">
