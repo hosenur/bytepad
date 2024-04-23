@@ -1,65 +1,39 @@
-import { useEffect, useRef } from "react";
-import { Socket } from "socket.io-client";
-import { Terminal } from "xterm";
-import { FitAddon } from 'xterm-addon-fit';
-
+import { Terminal as XTerm } from '@xterm/xterm';
+import { useEffect, useRef } from 'react';
+import { FitAddon } from '@xterm/addon-fit';
+import { AttachAddon } from "@xterm/addon-attach";
 const fitAddon = new FitAddon();
 
-function ab2str(buf: ArrayBuffer): string {
-    return String.fromCharCode.apply(null, Array.from(new Uint8Array(buf)));
-}
-
-const OPTIONS_TERM = {
-    useStyle: true,
-    screenKeys: true,
-    cursorBlink: true,
-    cols: 200,
-    theme: {
-        background: "black"
-    }
-};
-interface Props {
-    socket: Socket | undefined;
-    tag: string | undefined;
-}
-
-export const TerminalComponent = ({ socket, tag }: Props) => {
-    if (!socket || !tag) {
-        return null;
-    }
+export default function Terminal({ tag }: { tag: string | undefined }) {
     const terminalRef = useRef<HTMLDivElement>(null);
-
     useEffect(() => {
-        if (!terminalRef.current || !socket) {
-            return;
-        }
-
-        socket.on("terminalOutput", terminalHandler);
-        const term = new Terminal(OPTIONS_TERM);
+        if (!terminalRef.current || !tag) return;
+        const term = new XTerm({
+            convertEol: true,
+            cols: 100,
+            cursorStyle: 'underline',
+            cursorBlink: true,
+            fontFamily: 'Courier New',
+            fontSize: 14,
+            fontWeight: 'bold',
+            theme: {
+                background: '#000000',
+                foreground: '#FFFFFF',
+                cursor: '#00FF00',
+            },
+        });
+        const socket = new WebSocket(`ws://api.bytepad.pro/containers/${tag}/attach/ws?stream=1&stdout=1&stdin=1&logs=1 HTTP/1.1`)
+        const attachAddon = new AttachAddon(socket);
+        term.loadAddon(attachAddon);
         term.loadAddon(fitAddon);
         term.open(terminalRef.current);
-        fitAddon.fit();
-
-        function terminalHandler({ data }: { data: ArrayBuffer }) {
-            console.log(ab2str(data));
-            term.write(ab2str(data));
+        return () => {
+            term.dispose();
         }
 
-        term.onData((data) => {
-            socket.emit('command', {
-                data,
-                tag
-            });
-        });
-
-        socket.emit('command', {
-            data: '\n'
-        });
-
-        return () => {
-            socket.off("terminal");
-        };
-    }, [socket]);
-
-    return <div style={{ width: "40vw", height: "400px", textAlign: "left" }} ref={terminalRef}></div>;
-};
+    }, [terminalRef])
+    return (
+        <div ref={terminalRef}>
+        </div>
+    )
+}

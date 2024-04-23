@@ -79,6 +79,7 @@ function bootstrap() {
     });
 
     socket.on('command', (command, tag) => {
+      console.log("recieved term")
       console.log('Received command:', command);
       executeCommand(command, socket, tag);
     });
