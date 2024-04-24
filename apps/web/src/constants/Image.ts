@@ -10,6 +10,5 @@ const mapping = {
 
 }
 export const getImage = (value: FrameworkType) => {
-    console.log(value)
     return mapping[value]
 }
