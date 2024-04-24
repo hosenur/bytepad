@@ -26,6 +26,8 @@ export default function Preview({
                     if (res.status === 200) {
                         clearInterval(interval);
                         setPreviewStatus(true);
+                    } else if (res.status === 502) {
+                        console.log("Nginx 502 Error"); // Handle Nginx 502 Error
                     }
                 })
                 .catch((err) => {
