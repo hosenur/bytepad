@@ -5,21 +5,11 @@ import { redis } from "@/utils/redis";
 import { s3 } from "@/utils/s3";
 import { Playground } from "@prisma/client";
 import type { Request, Response } from "express";
-import { animals, colors, uniqueNamesGenerator } from "unique-names-generator";
+import { animals, colors, uniqueNamesGenerator,adjectives } from "unique-names-generator";
 import { v4 as uuid } from 'uuid';
 
 export class PlaygroundController {
-  public async getPlaygroundStatus(req: Request, res: Response): Promise<void> {
-    const { tag } = req.params;
-    const running = await redis.get(tag) ? true : false;
-    res.json({ running });
-  }
-  public async getPort(req: Request, res: Response): Promise<void> {
-    const { tag } = req.params;
-    const data = await redis.get(tag);
-    const port = JSON.parse(data || "{}").port;
-    res.json({ port });
-  }
+
   public async addUserToPlayground(req: Request, res: Response): Promise<void> {
     const { tag, email } = req.body;
     if (!req.auth.userId) {
@@ -50,6 +40,7 @@ export class PlaygroundController {
       }
     });
     //send mail
+    
 
   }
   public async acceptInvitation(req: Request, res: Response): Promise<void> { }
@@ -104,7 +95,6 @@ export class PlaygroundController {
 
 
   public async createPlayground(req: Request, res: Response): Promise<void> {
-    const template = getTemplateName(req.body.type);
     const { framework } = req.body;
     if (!framework) {
       res.status(400).json({ message: "Type is required" });
@@ -114,7 +104,8 @@ export class PlaygroundController {
       res.status(401).json({ message: "Unauthorized" });
       return;
     }
-    const tag = uniqueNamesGenerator({ dictionaries: [colors, animals], separator: '-', length: 2, seed: uuid() });
+    //Generating a unique tag name for the project which will act as the container name, and subdomain
+    const tag = uniqueNamesGenerator({ dictionaries: [adjectives,colors, animals], separator: '-', length: 3, seed: uuid() });
     await setupPlayground(framework, tag);
     await prisma.playground.create({
       data: {
@@ -147,6 +138,8 @@ export class PlaygroundController {
         }
       }
     })
+
+    // Adding the container running status
     const playgrounds: ResponseType = await Promise.all(data.map(async playground => {
       const running = await redis.get(playground.tag) ? true : false;
       return {

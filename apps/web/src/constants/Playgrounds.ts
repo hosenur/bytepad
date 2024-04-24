@@ -5,6 +5,7 @@ enum FrameworkType {
     NEXTPAGE = "NEXTPAGE",
     NUXT = "NUXT",
     SVELTE = "SVELTE",
+    EXPO = "EXPO",
 }
 export const playgroundTypes = [
     {
@@ -42,6 +43,12 @@ export const playgroundTypes = [
         "name": "Svelte",
         "description": "Svelte Application With Vite",
         "framework": FrameworkType.SVELTE,
+    },
+    {
+        "id": 7,
+        "name": "IOS / Android App",
+        "description": "React Native App Playground with Expo",
+        "framework": FrameworkType.EXPO,
     },
 
 ]

@@ -13,11 +13,11 @@ export default function Header({ tag }: { tag: string | undefined }) {
     return (
         <header className='bg-zinc-900 w-full text-white border-b border-zinc-800 h-16 flex items-center justify-center px-5'>
 
-                <div className='mr-auto font-black font-mono uppercase'>
-            <Link to='/'>
+            <div className='mr-auto font-black font-mono uppercase'>
+                <Link to='/playgrounds'>
                     Bytepad
-            </Link>
-                    </div>
+                </Link>
+            </div>
             <div className='flex gap-2 items-center text-zinc-500'>
                 <Globe className='w-4 h-4 text-gray-400' />
                 <span className='text-sm font-medium text-gray-300'>https://{tag}.bytepad.pro</span>

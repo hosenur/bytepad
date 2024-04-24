@@ -6,6 +6,7 @@ const mappings: Record<FrameworkType, string>
     "NEXTAPP": "bytenextapp",
     "NEXTPAGE": "bytenextpage",
     "NUXT": "bytenuxt",
+    "EXPO" : "byteexpo"
 }
 export const getTemplateName = (framework: FrameworkType) => {
     if (mappings[framework]) {

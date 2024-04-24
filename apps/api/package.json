@@ -9,7 +9,8 @@
     "dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only src/index.ts",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "email": "email dev --dir src/emails"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +20,7 @@
     "@types/express": "^4.17.21",
     "@types/morgan": "^1.9.9",
     "@types/node": "^20.11.24",
+    "@types/nodemailer": "^6.4.14",
     "@types/react": "^18.2.66",
     "@types/uuid": "^9.0.8",
     "nodemon": "^3.1.0",
@@ -31,6 +33,7 @@
     "@clerk/clerk-sdk-node": "^4.13.14",
     "@prisma/client": "^5.12.1",
     "@react-email/components": "0.0.16",
+    "@react-email/render": "^0.0.12",
     "@react-email/tailwind": "0.0.15",
     "@types/fs-extra": "^11.0.4",
     "aws-sdk": "^2.1601.0",

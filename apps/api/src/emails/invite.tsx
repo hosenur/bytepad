@@ -1,152 +1,113 @@
 import {
     Body,
-    Button,
     Container,
-    Column,
     Head,
     Heading,
-    Hr,
     Html,
-    Img,
     Link,
-    Preview,
-    Row,
-    Section,
-    Text,
+    Text
 } from "@react-email/components";
-import { Tailwind } from "@react-email/tailwind";
-import * as React from "react";
 
-interface VercelInviteUserEmailProps {
-    username?: string;
-    userImage?: string;
-    invitedByUsername?: string;
-    invitedByEmail?: string;
-    teamName?: string;
-    teamImage?: string;
-    inviteLink?: string;
-    inviteFromIp?: string;
-    inviteFromLocation?: string;
+interface InviteEmailProps {
+    token: string;
+    tag: string;
 }
 
-const baseUrl = "test"
+const baseUrl = "https://bytepad.pro";
 
-export const VercelInviteUserEmail = ({
-    username,
-    userImage,
-    invitedByUsername,
-    invitedByEmail,
-    teamName,
-    teamImage,
-    inviteLink,
-    inviteFromIp,
-    inviteFromLocation,
-}: VercelInviteUserEmailProps) => {
-    const previewText = `Join ${invitedByUsername} on Vercel`;
+export const InviteEmail = ({
+    token, tag
+}: InviteEmailProps) => (
+    <Html lang="en">
+        <Head>
+            <meta charSet="utf-8" />
+            <meta name="viewport" content="width=device-width" />
+            <title>Bytepad</title>
+        </Head>
+        <Body>
+            <Container style={main}>
+                <Container style={container}>
+                    <Heading style={h1}>You have been invited to Bytepad</Heading>
+                    <Text style={text}>
+                        You have been invited to join a Bytepad project. Click the link below to get started.
+                    </Text>
+                    <Link href={`${baseUrl}/auth/invite/${token}`} style={link}>
+                        Join Project
+                    </Link>
+                    <Text style={text}>
+                        If you have any trouble with the button above, you can also copy and paste the link below into your browser.
+                    </Text>
+                    <Text style={code}>
+                        {`${baseUrl}/auth/invite/${token}`}
+                    </Text>
+                    <Text style={footer}>
+                        Bytepad is an online coding playground platform.
+                    </Text>
+                </Container>
+            </Container>
+        </Body>
+    </Html>
+);
 
-    return (
-        <Html>
-            <Head />
-            <Preview>{previewText}</Preview>
-            <Tailwind>
-                <Body className="bg-white my-auto mx-auto font-sans px-2">
-                    <Container className="border border-solid border-[#eaeaea] rounded my-[40px] mx-auto p-[20px] max-w-[465px]">
-                        <Section className="mt-[32px]">
-                            <Img
-                                src={`${baseUrl}/static/vercel-logo.png`}
-                                width="40"
-                                height="37"
-                                alt="Vercel"
-                                className="my-0 mx-auto"
-                            />
-                        </Section>
-                        <Heading className="text-black text-[24px] font-normal text-center p-0 my-[30px] mx-0">
-                            Join <strong>{teamName}</strong> on <strong>Vercel</strong>
-                        </Heading>
-                        <Text className="text-black text-[14px] leading-[24px]">
-                            Hello {username},
-                        </Text>
-                        <Text className="text-black text-[14px] leading-[24px]">
-                            <strong>{invitedByUsername}</strong> (
-                            <Link
-                                href={`mailto:${invitedByEmail}`}
-                                className="text-blue-600 no-underline"
-                            >
-                                {invitedByEmail}
-                            </Link>
-                            ) has invited you to the <strong>{teamName}</strong> team on{" "}
-                            <strong>Vercel</strong>.
-                        </Text>
-                        <Section>
-                            <Row>
-                                <Column align="right">
-                                    <Img
-                                        className="rounded-full"
-                                        src={userImage}
-                                        width="64"
-                                        height="64"
-                                    />
-                                </Column>
-                                <Column align="center">
-                                    <Img
-                                        src={`${baseUrl}/static/vercel-arrow.png`}
-                                        width="12"
-                                        height="9"
-                                        alt="invited you to"
-                                    />
-                                </Column>
-                                <Column align="left">
-                                    <Img
-                                        className="rounded-full"
-                                        src={teamImage}
-                                        width="64"
-                                        height="64"
-                                    />
-                                </Column>
-                            </Row>
-                        </Section>
-                        <Section className="text-center mt-[32px] mb-[32px]">
-                            <Button
-                                className="bg-[#000000] rounded text-white text-[12px] font-semibold no-underline text-center px-5 py-3"
-                                href={inviteLink}
-                            >
-                                Join the team
-                            </Button>
-                        </Section>
-                        <Text className="text-black text-[14px] leading-[24px]">
-                            or copy and paste this URL into your browser:{" "}
-                            <Link href={inviteLink} className="text-blue-600 no-underline">
-                                {inviteLink}
-                            </Link>
-                        </Text>
-                        <Hr className="border border-solid border-[#eaeaea] my-[26px] mx-0 w-full" />
-                        <Text className="text-[#666666] text-[12px] leading-[24px]">
-                            This invitation was intended for{" "}
-                            <span className="text-black">{username}</span>. This invite was
-                            sent from <span className="text-black">{inviteFromIp}</span>{" "}
-                            located in{" "}
-                            <span className="text-black">{inviteFromLocation}</span>. If you
-                            were not expecting this invitation, you can ignore this email. If
-                            you are concerned about your account's safety, please reply to
-                            this email to get in touch with us.
-                        </Text>
-                    </Container>
-                </Body>
-            </Tailwind>
-        </Html>
-    );
+InviteEmail.PreviewProps = {
+    token: "123456",
+    tag: "my-project",
+} as InviteEmailProps;
+
+export default InviteEmail;
+
+const main = {
+    backgroundColor: "#ffffff",
 };
 
-VercelInviteUserEmail.PreviewProps = {
-    username: "alanturing",
-    userImage: `${baseUrl}/static/vercel-user.png`,
-    invitedByUsername: "Alan",
-    invitedByEmail: "alan.turing@example.com",
-    teamName: "Enigma",
-    teamImage: `${baseUrl}/static/vercel-team.png`,
-    inviteLink: "https://vercel.com/teams/invite/foo",
-    inviteFromIp: "204.13.186.218",
-    inviteFromLocation: "São Paulo, Brazil",
-} as VercelInviteUserEmailProps;
+const container = {
+    paddingLeft: "12px",
+    paddingRight: "12px",
+    margin: "0 auto",
+};
 
-export default VercelInviteUserEmail;
+const h1 = {
+    color: "#333",
+    fontFamily:
+        "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
+    fontSize: "24px",
+    fontWeight: "bold",
+    margin: "40px 0",
+    padding: "0",
+};
+
+const link = {
+    color: "#2754C5",
+    fontFamily:
+        "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
+    fontSize: "14px",
+    textDecoration: "underline",
+};
+
+const text = {
+    color: "#333",
+    fontFamily:
+        "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
+    fontSize: "14px",
+    margin: "24px 0",
+};
+
+const footer = {
+    color: "#898989",
+    fontFamily:
+        "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
+    fontSize: "12px",
+    lineHeight: "22px",
+    marginTop: "12px",
+    marginBottom: "24px",
+};
+
+const code = {
+    display: "inline-block",
+    padding: "16px 4.5%",
+    width: "90.5%",
+    backgroundColor: "#f4f4f4",
+    borderRadius: "5px",
+    border: "1px solid #eee",
+    color: "#333",
+};

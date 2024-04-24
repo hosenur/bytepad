@@ -1,10 +1,10 @@
-import { exec, ExecException } from 'child_process'; // Added type ExecException
+import { exec } from 'child_process'; // Added type ExecException
 import fs, { Dirent } from 'fs-extra'; // Added type Dirent
 import util from 'util';
-import { redis } from './redis';
+import { checkTag } from './helpers';
 import { clearPlayground } from './playgroundUtils';
+import { redis } from './redis';
 import { s3 } from './s3';
-import { Socket } from 'socket.io';
 
 interface File {
     type: "file" | "dir";
@@ -18,14 +18,17 @@ const getRandomPort = (): number => {
     return Math.floor(Math.random() * 2000) + 3000;
 }
 
-export const createContainer = async (tag: string): Promise<number | void> => { // Added return type Promise<number | void>
+export const createContainer = async (tag: string): Promise<boolean> => { // Added return type Promise<number | void>
     const containerExists = await checkTag(tag)
     const filesExists = fs.existsSync(`./tmp/${tag}`)
 
+    // If container and files already exist, return 
     if (filesExists && containerExists) {
         console.log("Container Already Exists For Tag: ", tag);
-        return;
+        return true;
     }
+
+    // if any of the files or container does not exist, clear the playground, continue creating fresh container
     if (!filesExists || !containerExists) {
         await clearPlayground(tag)
     }
@@ -33,13 +36,17 @@ export const createContainer = async (tag: string): Promise<number | void> => { 
     console.log("Creating Container For Tag: ", tag);
 
     const port = getRandomPort();
+
+    // Copy the files from s3 to local tmp directory
     await execAsync(`mkdir -p ./tmp/${tag} && aws s3 cp s3://bytepad/playgrounds/${tag} ./tmp/${tag} --recursive`);
 
+    // Create a docker container with the tag and mount the local tmp directory
     await execAsync(`docker run -d -i -t --name ${tag} -v ./tmp/${tag}:/app -p ${port}:3000 bytepad /bin/bash -c "cd /app && bun install && bun dev & /bin/bash"`);
-    
+
     await redis.set(tag, JSON.stringify({ port, lastRequest: Date.now() }));
     console.log(tag, " running on port ", port);
-    return port;
+
+    return true;
 }
 
 export const getDirectory = (dir: string, baseDir: string): Promise<File[]> => {
@@ -79,27 +86,6 @@ export const saveFile = async (file: string, content: string, tag: string): Prom
         });
     });
 }
-export function executeCommand(command: string, socket: Socket, tag: string) {
-    const dockerCommand = `docker exec ${tag} sh -c '${command}'`;
-
-    const child = exec(dockerCommand);
-
-    child.stdout?.on('data', (data) => {
-        socket.emit('terminalOutput', data.toString());
-    });
-
-    child.stderr?.on('data', (data) => {
-        socket.emit('terminalOutput', data.toString());
-    });
-
-    child.on('error', (error) => {
-        socket.emit('terminalOutput', `Error executing command: ${error.message}`);
-    });
-
-    child.on('exit', (code, signal) => {
-        socket.emit('terminalOutput', `Command exited with code ${code} and signal ${signal}`);
-    });
-}
 
 export const syncFile = async (tag: string, filePath: string, content: string): Promise<void> => {
     if (filePath.includes("node_modules") || filePath.includes(".next") || filePath.includes(".nuxt")) {
@@ -114,15 +100,4 @@ export const syncFile = async (tag: string, filePath: string, content: string): 
     await s3.putObject(params).promise()
 }
 // Function to check if a docker with  a tag exists and return true or false asynchrnously
-export function checkTag(tag: string) {
-    return new Promise((resolve, reject) => {
-        exec(`docker ps -a -q --filter "name=${tag}"`, (err: ExecException | null, stdout: string, stderr: string) => {
-            if (err) {
-                reject(err);
-            }
-            else {
-                resolve(stdout ? true : false);
-            }
-        })
-    })
-}
+

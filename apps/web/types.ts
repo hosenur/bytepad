@@ -23,4 +23,5 @@ export enum FrameworkType {
     NEXTPAGE = "NEXTPAGE",
     NUXT = "NUXT",
     SVELTE = "SVELTE",
+    EXPO = "EXPO"
 }

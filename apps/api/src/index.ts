@@ -1,12 +1,14 @@
-import { createContainer, executeCommand, getDirectory, getFile, saveFile, syncFile } from "@/utils/containerUtils";
+import { createContainer, getDirectory, getFile, saveFile, syncFile } from "@/utils/containerUtils";
 import { ClerkExpressWithAuth } from "@clerk/clerk-sdk-node";
 import * as http from "http";
 import { Server } from "socket.io";
 import { app } from "./app";
 import { clearPlayground } from "./utils/playgroundUtils";
 import { redis } from "./utils/redis";
+import { checkTag } from "./utils/helpers";
+
+// Checks for idle container and removes them if last request was more than 20 minutes ago
 async function stopIdleContainers() {
-  console.log("Checking for idle containers");
   const keys = await redis.keys("*");
   if (!keys) return;
   await Promise.all(keys.map(async (key) => {
@@ -17,11 +19,12 @@ async function stopIdleContainers() {
       await clearPlayground(key);
     }
   }));
+
 }
 
 setInterval(async () => {
   await stopIdleContainers();
-}, 60000);
+}, 10000);
 
 
 function bootstrap() {
@@ -49,14 +52,19 @@ function bootstrap() {
 
   io.on("connection", async (socket) => {
     const tag = socket.handshake.query.tag as string;
-
     if (!tag) {
       socket.disconnect();
       return;
     }
+    const exists = await checkTag(tag);
+    
+    if (!exists) {
+      const port = await createContainer(tag);
+      socket.emit("containerCreated", port);
+    }
 
-    const port = await createContainer(tag);
-    socket.emit("containerCreated", port);
+
+
     const contents = await getDirectory(`./tmp/${tag}`, "");
     socket.emit("directory", contents);
 
@@ -78,11 +86,6 @@ function bootstrap() {
       await syncFile(tag, fullPath, content);
     });
 
-    socket.on('command', (command, tag) => {
-      console.log("recieved term")
-      console.log('Received command:', command);
-      executeCommand(command, socket, tag);
-    });
 
 
     socket.on("disconnect", (socket) => {

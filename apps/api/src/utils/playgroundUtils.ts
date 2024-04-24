@@ -1,11 +1,10 @@
 import { FrameworkType } from "@/types";
-import { getTemplateName } from "./getTemplateName";
-import { s3 } from "./s3";
-import fs from "fs-extra"
-import util from "util"
 import { exec } from 'child_process';
+import util from "util";
+import { getTemplateName } from "./getTemplateName";
+import { cleanStorage, deleteContainer } from "./helpers";
 import { redis } from "./redis";
-import { checkTag } from "./containerUtils";
+import { s3 } from "./s3";
 
 const execAsync = util.promisify(exec);
 
@@ -54,33 +53,8 @@ export const setupPlayground = async (framework: FrameworkType, tag: string) => 
 };
 
 export const clearPlayground = async (tag: string) => {
-    const containerExists = await checkTag(tag);
-    if (containerExists) {
-        try {
-            await execAsync(`docker stop ${tag}`);
-            console.log("Container Stopped")
-            await execAsync(`docker rm ${tag}`);
-            console.log("Container Removed")
-            await execAsync(`rm -rf ./tmp/${tag}`)
-            console.log("Files Removed")
-            await redis.del(tag);
-        }
-        catch (e) {
-            console.error(e);
-        }
+    await deleteContainer(tag);
+    await cleanStorage(tag);
+    await redis.del(tag);
+}
 
-    }
-}
-const deleteFolderRecursive = async (path: string) => {
-    if (fs.existsSync(path)) {
-        fs.readdirSync(path).forEach((file, index) => {
-            const curPath = `${path}/${file}`;
-            if (fs.lstatSync(curPath).isDirectory()) { // recurse
-                deleteFolderRecursive(curPath);
-            } else { // delete file
-                fs.unlinkSync(curPath);
-            }
-        });
-        fs.rmdirSync(path);
-    }
-}

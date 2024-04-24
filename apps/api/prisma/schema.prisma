@@ -49,6 +49,7 @@ enum FrameworkType {
   NEXTAPP
   NEXTPAGE
   NUXT
+  EXPO
 }
 
 enum Role {
