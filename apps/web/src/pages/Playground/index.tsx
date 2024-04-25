@@ -98,22 +98,21 @@ export default function Playground() {
 
         <ResizableHandle withHandle />
 
-        <ResizablePanel>
-          <ResizablePanelGroup direction="vertical">
-            <ResizablePanel defaultSize={70}>
-              <EditorComponent
-                setOpenFiles={setOpenFiles}
-                openFiles={openFiles}
-              />
-            </ResizablePanel>
-            <ResizableHandle withHandle />
-            <ResizablePanel defaultSize={30}>
-              <Terminal tag={tag} container={containerStatus} previewStatus={previewStatus} />
-            </ResizablePanel>
-          </ResizablePanelGroup>
-        </ResizablePanel>
 
+        <ResizablePanel defaultSize={70}>
+          <div className="h-[70vh]">
+            <EditorComponent
+              setOpenFiles={setOpenFiles}
+              openFiles={openFiles}
+            />
+          </div>
+          <div className="h-[30vh]">
+
+            <Terminal tag={tag} container={containerStatus} previewStatus={previewStatus} />
+          </div>
+        </ResizablePanel>
         <ResizableHandle withHandle />
+
 
         <ResizablePanel defaultSize={30}>
           <Preview setPreviewStatus={setPreviewStatus} previewStatus={previewStatus} tag={tag} />

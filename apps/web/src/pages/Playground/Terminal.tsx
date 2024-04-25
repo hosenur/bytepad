@@ -11,6 +11,7 @@ export default function Terminal({ tag, container, previewStatus }: { tag: strin
         if (!terminalRef.current || !tag || !container || !previewStatus) return;
 
         const term = new XTerm({
+            rows: 30,
             convertEol: true,
             cursorStyle: 'bar',
             cursorBlink: true,
@@ -38,7 +39,7 @@ export default function Terminal({ tag, container, previewStatus }: { tag: strin
 
 
     return (
-        <div className='terminal-container' ref={terminalRef}>
+        <div className='terminal-container bg-black' ref={terminalRef}>
         </div>
     );
 }
