@@ -12,7 +12,17 @@ export default function Terminal({ tag, container, previewStatus }: { tag: strin
         if (!terminalRef.current || !tag || !container || !previewStatus) return;
 
         const term = new XTerm({
-            convertEol: true
+            convertEol: true,
+            cursorStyle: 'block',
+            cursorBlink: true,
+            fontFamily: 'monospace',
+            fontSize: 14,
+            fontWeight: '600',
+            theme: {
+                background: '#2b2b2b',
+                foreground: '#FFFFFF',
+                cursor: '#00FF00',
+            },
         });
 
         const socket = new WebSocket(`wss://terminal.bytepad.pro/containers/${tag}/attach/ws?stream=1&stdout=1&stdin=1&logs=1`);
@@ -30,7 +40,7 @@ export default function Terminal({ tag, container, previewStatus }: { tag: strin
 
 
     return (
-        <div className='terminal-container font-mono max-h-min overflow-y-scroll bg-black' ref={terminalRef}>
+        <div className='terminal-container bg-black overflow-y-scroll' ref={terminalRef}>
         </div>
     );
 }
