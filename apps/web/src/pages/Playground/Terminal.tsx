@@ -30,7 +30,7 @@ export default function Terminal({ tag, container, previewStatus }: { tag: strin
 
 
     return (
-        <div className='terminal-container max-h-min overflow-y-scroll bg-black' ref={terminalRef}>
+        <div className='terminal-container font-mono max-h-min overflow-y-scroll bg-black' ref={terminalRef}>
         </div>
     );
 }
