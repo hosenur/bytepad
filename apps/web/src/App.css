@@ -84,3 +84,7 @@
   backdrop-filter: blur(1px);
   -webkit-backdrop-filter: blur(1px);
 }
+
+.xterm-helpers {
+  display: none;
+}
