@@ -32,7 +32,7 @@ export default function EditorComponent({
             renderTile={(id, path) => (
                 <Window
                     file={openFiles.find(file => file.id === id)}
-                    id={id}
+                    // id={id}
                     path={path} />
             )}
             initialValue={{
