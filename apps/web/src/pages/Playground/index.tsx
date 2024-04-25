@@ -36,9 +36,6 @@ export default function Playground() {
   //   }
   //   socket?.emit("saveFile", { path: selectedFile.path, content: value });
   // }, 1500), [selectedFile, socket]);
-  function refreshDirectory() {
-    socket?.emit("refreshDirectory");
-  }
 
   useEffect(() => {
     if (!socket || !tag) {
@@ -111,7 +108,7 @@ export default function Playground() {
             </ResizablePanel>
             <ResizableHandle withHandle />
             <ResizablePanel defaultSize={30}>
-              <Terminal tag={tag} container={containerStatus} previewStatus={previewStatus} refreshDirectory={refreshDirectory} />
+              <Terminal tag={tag} container={containerStatus} previewStatus={previewStatus} />
             </ResizablePanel>
           </ResizablePanelGroup>
         </ResizablePanel>

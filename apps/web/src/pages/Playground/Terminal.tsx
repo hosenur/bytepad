@@ -5,9 +5,8 @@ import { AttachAddon } from "@xterm/addon-attach";
 
 const fitAddon = new FitAddon();
 
-export default function Terminal({ tag, container, previewStatus, refreshDirectory }: { tag: string | undefined, container: boolean, previewStatus: boolean, refreshDirectory: () => void }) {
+export default function Terminal({ tag, container, previewStatus }: { tag: string | undefined, container: boolean, previewStatus: boolean}) {
     const terminalRef = useRef<HTMLDivElement>(null);
-    let currentLine = "";
 
     useEffect(() => {
         console.log('terminal', tag, container, previewStatus);
