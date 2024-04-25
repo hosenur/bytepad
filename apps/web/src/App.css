@@ -92,7 +92,7 @@
   width: 100%;
 }
 .xterm-scroll-area {
-  overflow-y: hidden!important;
+  display: none;
 }
 /* .terminal-container > div {
   width: 100%;
