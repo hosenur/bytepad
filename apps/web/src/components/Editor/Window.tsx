@@ -2,12 +2,12 @@ import { File } from "@/lib/fsUtils";
 import { Editor } from "@monaco-editor/react";
 import { MosaicBranch, MosaicWindow } from "react-mosaic-component";
 type WindowProps = {
-    id: string;
+    // id: string;
     path: MosaicBranch[];
     file: File | undefined;
 }
 export default function Window({
-    id,
+    // id,
     path,
     file
 }: WindowProps) {
