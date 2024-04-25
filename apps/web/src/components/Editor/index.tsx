@@ -11,11 +11,11 @@ type EditorComponentProps = {
 
 export default function EditorComponent({
     openFiles,
-    setOpenFiles
+    // setOpenFiles
 }: EditorComponentProps) {
-    const closeFile = (id: string) => {
-        setOpenFiles(openFiles.filter(file => file.id !== id));
-    }
+    // const closeFile = (id: string) => {
+    //     setOpenFiles(openFiles.filter(file => file.id !== id));
+    // }
     if (openFiles.length === 0) {
         return <div className="w-full h-full flex items-center justify-center">
             <p>Open Up A File To Start Editing</p>

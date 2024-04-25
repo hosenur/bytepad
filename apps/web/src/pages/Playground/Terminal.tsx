@@ -5,7 +5,7 @@ import { AttachAddon } from "@xterm/addon-attach";
 
 const fitAddon = new FitAddon();
 
-export default function Terminal({ tag, container, previewStatus }: { tag: string | undefined, container: boolean, previewStatus: boolean }) {
+export default function Terminal({ tag, container, previewStatus, refreshDirectory }: { tag: string | undefined, container: boolean, previewStatus: boolean, refreshDirectory: () => void }) {
     const terminalRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -45,13 +45,24 @@ export default function Terminal({ tag, container, previewStatus }: { tag: strin
             console.error('Socket error:', error);
         };
 
+        const handleData = (data: string) => {
+            // Check if the command is a file manipulation command
+            const fileManipulationCommands = ['mv', 'cp', 'rm', 'mkdir', 'touch']; // Add more if needed
+            const command = data.trim().split(' ')[0]; // Get the first word as the command
+            if (fileManipulationCommands.includes(command)) {
+                refreshDirectory(); // Call the refreshDirectory function
+            }
+        };
+
         socket.addEventListener('close', handleSocketClose);
         socket.addEventListener('error', handleSocketError);
+        term.onData(handleData);
 
         return () => {
             term.dispose();
             socket.removeEventListener('close', handleSocketClose);
             socket.removeEventListener('error', handleSocketError);
+            attachAddon.dispose();
         };
     }, [tag, container, previewStatus]);
 

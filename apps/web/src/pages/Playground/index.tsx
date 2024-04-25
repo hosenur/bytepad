@@ -30,12 +30,12 @@ export default function Playground() {
   const socket = useSocket(tag);
 
   // Debounced onChange handler
-  const debouncedSaveFile = useMemo(() => _.debounce((value: string) => {
-    if (!selectedFile) {
-      return;
-    }
-    socket?.emit("saveFile", { path: selectedFile.path, content: value });
-  }, 1500), [selectedFile, socket]);
+  // const debouncedSaveFile = useMemo(() => _.debounce((value: string) => {
+  //   if (!selectedFile) {
+  //     return;
+  //   }
+  //   socket?.emit("saveFile", { path: selectedFile.path, content: value });
+  // }, 1500), [selectedFile, socket]);
   function refreshDirectory() {
     socket?.emit("getDirectory", "/", (data: RemoteFile[]) => {
       setRemoteFiles(data);
@@ -112,7 +112,7 @@ export default function Playground() {
             </ResizablePanel>
             <ResizableHandle withHandle />
             <ResizablePanel defaultSize={30}>
-              <Terminal tag={tag} container={containerStatus} previewStatus={previewStatus} />
+              <Terminal tag={tag} container={containerStatus} previewStatus={previewStatus} refreshDirectory={refreshDirectory} />
             </ResizablePanel>
           </ResizablePanelGroup>
         </ResizablePanel>
