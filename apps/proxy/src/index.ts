@@ -31,11 +31,16 @@ const server = http.createServer(async (req, res) => {
     }
 });
 
-// Middleware to enable CORS for all origins
 server.on('request', (req, res) => {
-    res.setHeader('Access-Control-Allow-Origin', '*'); // Allow requests from any origin
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    const allowedOrigin = 'https://www.bytepad.pro';
+    const requestOrigin = req.headers.origin;
+
+    if (requestOrigin && requestOrigin === allowedOrigin) {
+        res.setHeader('Access-Control-Allow-Origin', requestOrigin);
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+        res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    }
+
     if (req.method === 'OPTIONS') {
         res.writeHead(200);
         res.end();
