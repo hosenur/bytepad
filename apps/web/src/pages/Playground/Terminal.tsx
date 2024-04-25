@@ -7,6 +7,7 @@ const fitAddon = new FitAddon();
 
 export default function Terminal({ tag, container, previewStatus, refreshDirectory }: { tag: string | undefined, container: boolean, previewStatus: boolean, refreshDirectory: () => void }) {
     const terminalRef = useRef<HTMLDivElement>(null);
+    let currentLine = "";
 
     useEffect(() => {
         console.log('terminal', tag, container, previewStatus);
@@ -46,6 +47,7 @@ export default function Terminal({ tag, container, previewStatus, refreshDirecto
         };
 
         const handleData = (data: string) => {
+            console.log(data)
             // Check if the command is a file manipulation command
             const fileManipulationCommands = ['mv', 'cp', 'rm', 'mkdir', 'touch']; // Add more if needed
             const command = data.trim().split(' ')[0]; // Get the first word as the command
@@ -56,7 +58,14 @@ export default function Terminal({ tag, container, previewStatus, refreshDirecto
 
         socket.addEventListener('close', handleSocketClose);
         socket.addEventListener('error', handleSocketError);
-        term.onData(handleData);
+        term.onData((data) => {
+            currentLine += data;
+            if (data === '\r') {
+                handleData(currentLine);
+                currentLine = "";
+            }
+
+        })
 
         return () => {
             term.dispose();
