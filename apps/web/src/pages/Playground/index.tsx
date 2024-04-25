@@ -106,7 +106,7 @@ export default function Playground() {
               openFiles={openFiles}
             />
           </div>
-          <div className="h-[30vh]">
+          <div className="h-52">
 
             <Terminal tag={tag} container={containerStatus} previewStatus={previewStatus} />
           </div>
