@@ -1,48 +1,44 @@
 # Bytepad
-## Tech Stack
-**Client:** React, Vite, SWR, Monaco Editor, Xterm, Tailwind, Clerk
-
-**Server:** NodeJS, Express, Docker Engine API, AWS S3, Clerk, Prisma
-
-## View Project
-| System | URL     | Description                |
-| :-------- | :------- | :------------------------- |
-| `Frontend` | [bytepad.pro](https://bytepad.pro) |  Hosted on Vercel |
-| `Backend` | [hosenur.cloud](https://hosenur.cloud) | Hosted on Digital Ocean, Handles the backend, and project previews on subdomains |
-
 
 ## Important Implementation Details :
 - Everything is executed inside a docker container, which creates and isolated sandbox environment for projects.
 - No arbitrary / user entered command is ran on the host machine.
-- Used Nginx proxy to map `*project-id.domain.com` to the port which is running the project with the project ID to  preview of the currently running web app.
+- Used Nginx proxy to map `*project-id.bytepad.pro` to the port which is running the project with the project ID to  preview of the currently running web app.
 - Every endpoint is behind auth, only authenticated users can create projects, view projects they are a part of, delete.
-## Initial Architecture :
-During the inital build of this projct, I created framework specifc `Dockerfile`, which roughly did the following things :
-- Created a Ubuntu Container
-- Performed some misc tasks : Update + Install Node LTS + Install PNPM
-- Created the project using command
-- Replaced the framework specifc `dev` command to `dev --host` because that would make the exposed port accessible from the host machine, in our case which will be accessed via Nginx proxy to make it accessible to the internet.
-- Exposed the port
 
-Here is an exmaple for a React + TypeScript + SWC project using [Vite](https://vitejs.dev/guide/)
-```Dockerfile
-from ubuntu
-run apt update
-run apt install curl -y
-run apt install -y nodejs npm 
-run npm i -g n
-run n install lts
-run corepack enable
-workdir /app
-run pnpm create vite bytereact --template react-swc-ts
-workdir /app/bytereact
-run sed -i 's/"dev": "vite",/"dev": "vite --host",/' package.json
-run pnpm i
-expose 5173
-```
-And then created an image which I would use in future to build containers when someone created a Playground, which sums up to **(Caveat : 1) A new container for every project created.**, I had to fix that because this is a massive storage hog, The size of the image using Ubuntu after building it was **approx: 1.5GB**,And I cant delete the image too because the project was stored only inside the image and persisted no where else, I modified the images to run on **Alpine** insteead, doing this reduced the image size to **approx 300MB** (Improvement of ~ 82%), But doing this would still meant **(Caveat 2) Blocking 300MB of storage for every project**. Both image size mentioned is without `node_modules`, which meant more space hog.
-## Current Architecture:
-The current architecture,(Abstractly how it works in Codedamn) which the project is built on used Alpine for the Image, but doesn't create a new image for every new project, but rather has a template library containing a Skeleton project for each project framework, when a new project is created an instance of the template is uploaded to AWS S3, then copied to a Alpine instance, and then is synced with S3 after any changes by the user.
+## TechStack:
 
-- Running the project in a docker container basically meant running on an  isolated env, still `chroot` is implemented to set the root directory so that the user is not allowed to go out of the project folder in the container. 
-ok
+### Frontend :
+The project frontend is built with React, combined with several other libraries like Monaco Editor, Xterm.js , SWR, Tailwind CSS and Scoket.io
+
+### Backend :
+Built with Express + NodeJS , Docker , Docker Engine API, Nginx, Socket, AWS and Proxies
+
+## Flow :
+- User creates a project
+- New project is created with a template repository within S3
+- The remote files are downloaded locally and is mounted to a newly created `oven/bun` docker container.
+- The container gets a random port assigned to it which is mapped to port 3000 (Every project runs on port 3000 inside the docker container).
+- The project is now live and running
+- The user hits an URL `id.bytepad.pro`, which goes through a proxy to the port where the project is running.
+
+## Architecture:
+ The project is seperated into three main parts, the **Frontend** , the **Proxy Server** and **Main Backend**, 
+
+ Only the proxy server is exposed to the internet, the Backend + MySQL DB + Redis is inside the same private network as the proxy server and has no direct access to internet.
+
+ The proxy server is responsible for routing the requests to the correct destination.
+
+ If a request comes with the host `api.bytepad.pro` the proxy server will route the request to the main backend.
+ 
+ If a request comes with the host `*wildcard.bytepad.pro` the proxy server will get the port the container is running on from Redis and route the request to the correct port.
+
+If a request comes to `terminal.bytepad.pro` the proxy server will route the request to the docker socket which in running in the Unix system. So that Xterm in the frontend can attach to this websocket. Which will be used to run the terminal in the browser. This runs commands directly inside the container and we hav e to handle 0 fuss for running the terminal by ourselves.
+
+
+
+## Running IOS/Android Applications :
+Hybrid applications usign React Native and Expo can be eaily run on the platform. How they achieve this on [Expo Snack](https://snack.expo.dev/) is, they user [Appetize](https://appetize.io/) to provide users with an emulator with a single app installed : Expo Go. Now the best part is Expo Go runs apps through URL, so we can easily run the app on the emulator by providing the URL of the app. This can be easily implemented in the platform. But there are some things to take in consideration, like exposing multiple ports for The Expo Developer Tools and React Native Packager. I already tried building this and it is running perfectly when not inside  a docker container. But when inside a docker container there are few things to take care of.
+
+
+
