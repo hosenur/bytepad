@@ -100,13 +100,13 @@ export default function Playground() {
 
 
         <ResizablePanel defaultSize={70}>
-          <div className="h-[70vh]">
+          <div className="h-[80vh]">
             <EditorComponent
               setOpenFiles={setOpenFiles}
               openFiles={openFiles}
             />
           </div>
-          <div className="h-52">
+          <div className="h-[20vh]">
 
             <Terminal tag={tag} container={containerStatus} previewStatus={previewStatus} />
           </div>
