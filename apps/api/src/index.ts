@@ -6,7 +6,7 @@ import { app } from "./app";
 import { clearPlayground } from "./utils/playgroundUtils";
 import { redis } from "./utils/redis";
 import { checkTag } from "./utils/helpers";
-
+import fs from "fs-extra"
 // Checks for idle container and removes them if last request was more than 20 minutes ago
 async function stopIdleContainers() {
   const keys = await redis.keys("*");
@@ -68,10 +68,11 @@ function bootstrap() {
     const contents = await getDirectory(`./tmp/${tag}`, "");
     socket.emit("directory", contents);
 
-    socket.on("refreshDirectory", async () => {
+    fs.watch(`./tmp/${tag}`, async () => {
       const contents = await getDirectory(`./tmp/${tag}`, "");
       socket.emit("directory", contents);
-    });
+    })
+    
 
     socket.on("getDirectory", async (dir: string, callback) => {
       const dirPath = `./tmp/${tag}/${dir}`;

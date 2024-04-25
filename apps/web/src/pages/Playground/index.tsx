@@ -49,6 +49,7 @@ export default function Playground() {
       toast.success("Connected to container");
     });
     socket.on("directory", (directory) => {
+      console.log("Directory Refresh")
       setContainerStatus(true);
       console.log("directory");
       setRemoteFiles(directory);
