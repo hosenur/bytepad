@@ -65,7 +65,7 @@ export default function Terminal({ tag, container, previewStatus }: { tag: strin
 
 
     return (
-        <div className='font-mono terminal-container max-h-full' ref={terminalRef}>
+        <div className='font-mono terminal-container max-h-min flex items-start' ref={terminalRef}>
         </div>
     );
 }
