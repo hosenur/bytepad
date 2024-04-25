@@ -38,24 +38,24 @@ export default function Terminal({ tag, container, previewStatus, refreshDirecto
         fitAddon.fit();
         term.focus();
 
-        const handleData = (data: string) => {
-            console.log(data)
-            // Check if the command is a file manipulation command
-            const fileManipulationCommands = ['mv', 'cp', 'rm', 'mkdir', 'touch']; // Add more if needed
-            const command = data.trim().split(' ')[0]; // Get the first word as the command
-            if (fileManipulationCommands.includes(command)) {
-                refreshDirectory(); // Call the refreshDirectory function
-            }
-        };
+        // const handleData = (data: string) => {
+        //     console.log(data)
+        //     // Check if the command is a file manipulation command
+        //     const fileManipulationCommands = ['mv', 'cp', 'rm', 'mkdir', 'touch']; // Add more if needed
+        //     const command = data.trim().split(' ')[0]; // Get the first word as the command
+        //     if (fileManipulationCommands.includes(command)) {
+        //         refreshDirectory(); // Call the refreshDirectory function
+        //     }
+        // };
 
-        term.onData((data) => {
-            currentLine += data;
-            if (data === '\r') {
-                handleData(currentLine);
-                currentLine = "";
-            }
+        // term.onData((data) => {
+        //     currentLine += data;
+        //     if (data === '\r') {
+        //         handleData(currentLine);
+        //         currentLine = "";
+        //     }
 
-        })
+        // })
 
         return () => {
             term.dispose();
