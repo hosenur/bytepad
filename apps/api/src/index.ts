@@ -68,6 +68,11 @@ function bootstrap() {
     const contents = await getDirectory(`./tmp/${tag}`, "");
     socket.emit("directory", contents);
 
+    socket.on("refreshDirectory", async () => {
+      const contents = await getDirectory(`./tmp/${tag}`, "");
+      socket.emit("directory", contents);
+    });
+
     socket.on("getDirectory", async (dir: string, callback) => {
       const dirPath = `./tmp/${tag}/${dir}`;
       const contents = await getDirectory(dirPath, dir);

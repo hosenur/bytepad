@@ -38,14 +38,6 @@ export default function Terminal({ tag, container, previewStatus, refreshDirecto
         fitAddon.fit();
         term.focus();
 
-        const handleSocketClose = () => {
-            console.log('Socket closed');
-        };
-
-        const handleSocketError = (error: Event) => {
-            console.error('Socket error:', error);
-        };
-
         const handleData = (data: string) => {
             console.log(data)
             // Check if the command is a file manipulation command
@@ -56,8 +48,6 @@ export default function Terminal({ tag, container, previewStatus, refreshDirecto
             }
         };
 
-        socket.addEventListener('close', handleSocketClose);
-        socket.addEventListener('error', handleSocketError);
         term.onData((data) => {
             currentLine += data;
             if (data === '\r') {
@@ -69,8 +59,6 @@ export default function Terminal({ tag, container, previewStatus, refreshDirecto
 
         return () => {
             term.dispose();
-            socket.removeEventListener('close', handleSocketClose);
-            socket.removeEventListener('error', handleSocketError);
             attachAddon.dispose();
         };
     }, [tag, container, previewStatus]);

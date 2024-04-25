@@ -37,9 +37,7 @@ export default function Playground() {
   //   socket?.emit("saveFile", { path: selectedFile.path, content: value });
   // }, 1500), [selectedFile, socket]);
   function refreshDirectory() {
-    socket?.emit("getDirectory", "/", (data: RemoteFile[]) => {
-      setRemoteFiles(data);
-    });
+    socket?.emit("refreshDirectory");
   }
 
   useEffect(() => {
