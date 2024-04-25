@@ -33,7 +33,7 @@ const server = http.createServer(async (req, res) => {
 
 // Middleware to enable CORS for https://www.bytepad.pro
 server.on('request', (req, res) => {
-    const allowedOrigins = ['https://www.bytepad.pro',"*"]; // Define allowed origins
+    const allowedOrigins = ['https://www.bytepad.pro',"http://localhost:5173"]; // Define allowed origins
     const origin = req.headers.origin;
     if (!origin) {
         return;
