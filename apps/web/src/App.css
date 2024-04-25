@@ -87,14 +87,15 @@
 
 
 .terminal-container {
-  background-color: #000000;
-  font-family: monospace!important;
-  width: 100%;
+  height: 100%;
+  margin: auto;
+  box-sizing: border-box;
 }
-.xterm-scroll-area {
-  display: none;
+.terminal{
+  padding: 5px;
 }
-/* .terminal-container > div {
+
+.terminal-container > div {
   width: 100%;
   height: 175%;
-} */
+}

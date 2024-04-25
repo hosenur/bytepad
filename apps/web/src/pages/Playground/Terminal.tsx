@@ -1,9 +1,6 @@
 import { Terminal as XTerm } from '@xterm/xterm';
 import { useEffect, useRef } from 'react';
-import { FitAddon } from '@xterm/addon-fit';
 import { AttachAddon } from "@xterm/addon-attach";
-
-const fitAddon = new FitAddon();
 
 export default function Terminal({ tag, container, previewStatus }: { tag: string | undefined, container: boolean, previewStatus: boolean }) {
     const terminalRef = useRef<HTMLDivElement>(null);
@@ -32,9 +29,7 @@ export default function Terminal({ tag, container, previewStatus }: { tag: strin
         const attachAddon = new AttachAddon(socket);
 
         term.loadAddon(attachAddon);
-        term.loadAddon(fitAddon);
         term.open(terminalRef.current);
-        fitAddon.fit();
 
         return () => {
             term.dispose();
@@ -44,7 +39,7 @@ export default function Terminal({ tag, container, previewStatus }: { tag: strin
 
 
     return (
-        <div className='bg-black h-36 text-white' ref={terminalRef}>
+        <div className='bg-black h-full text-white w-full' ref={terminalRef}>
         </div>
     );
 }
