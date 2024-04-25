@@ -62,7 +62,7 @@ export default function Terminal({ tag, container, previewStatus }: { tag: strin
 
 
     return (
-        <div className='font-mono terminal-container overflow-y-scroll flex items-start' ref={terminalRef}>
+        <div className='' ref={terminalRef}>
         </div>
     );
 }
