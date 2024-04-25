@@ -63,24 +63,9 @@ export default function Terminal({ tag, container, previewStatus }: { tag: strin
         };
     }, [tag, container, previewStatus]);
 
-    useEffect(() => {
-        const terminalElement = terminalRef.current;
-        if (terminalElement) {
-            const handleScroll = () => {
-                const { scrollTop, scrollHeight, clientHeight } = terminalElement;
-                if (scrollHeight - scrollTop === clientHeight) {
-                    fitAddon.fit();
-                }
-            };
-            terminalElement.addEventListener('scroll', handleScroll);
-            return () => {
-                terminalElement.removeEventListener('scroll', handleScroll);
-            };
-        }
-    }, [terminalRef]);
 
     return (
-        <div className='font-mono terminal-container w-full h-full' ref={terminalRef}>
+        <div className='font-mono terminal-container max-h-full' ref={terminalRef}>
         </div>
     );
 }
