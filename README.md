@@ -5,6 +5,7 @@
 - No arbitrary / user entered command is ran on the host machine.
 - Used Nginx proxy to map `*project-id.bytepad.pro` to the port which is running the project with the project ID to  preview of the currently running web app.
 - Every endpoint is behind auth, only authenticated users can create projects, view projects they are a part of, delete.
+- Multiple user support, as every project is containerized, multiple users can work on the same project without any conflicts.
 
 ## TechStack:
 
