@@ -33,9 +33,7 @@ export default function Terminal({ tag, container, previewStatus }: { tag: strin
         term.loadAddon(attachAddon);
         term.loadAddon(fitAddon);
         term.open(terminalRef.current);
-        term.clear();
         fitAddon.fit();
-        term.focus();
 
         // const handleData = (data: string) => {
         //     console.log(data)
@@ -64,7 +62,7 @@ export default function Terminal({ tag, container, previewStatus }: { tag: strin
 
 
     return (
-        <div className='font-mono terminal-container max-h-min flex items-start' ref={terminalRef}>
+        <div className='font-mono terminal-container overflow-y-scroll flex items-start' ref={terminalRef}>
         </div>
     );
 }
