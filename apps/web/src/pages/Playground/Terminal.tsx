@@ -11,9 +11,8 @@ export default function Terminal({ tag, container, previewStatus }: { tag: strin
         if (!terminalRef.current || !tag || !container || !previewStatus) return;
 
         const term = new XTerm({
-            rows: 10,
             convertEol: true,
-            cursorStyle: 'underline',
+            cursorStyle: 'bar',
             cursorBlink: true,
             fontFamily: 'monospace',
             fontSize: 14,
