@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react';
 import { FitAddon } from '@xterm/addon-fit';
 import { AttachAddon } from "@xterm/addon-attach";
 
-const fitAddon = new FitAddon();
+// const fitAddon = new FitAddon();
 
 export default function Terminal({ tag, container, previewStatus }: { tag: string | undefined, container: boolean, previewStatus: boolean}) {
     const terminalRef = useRef<HTMLDivElement>(null);
@@ -31,9 +31,9 @@ export default function Terminal({ tag, container, previewStatus }: { tag: strin
         const attachAddon = new AttachAddon(socket);
 
         term.loadAddon(attachAddon);
-        term.loadAddon(fitAddon);
+        // term.loadAddon(fitAddon);
         term.open(terminalRef.current);
-        fitAddon.fit();
+        // fitAddon.fit();
 
         // const handleData = (data: string) => {
         //     console.log(data)
