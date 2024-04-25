@@ -1,11 +1,11 @@
 import { Terminal as XTerm } from '@xterm/xterm';
 import { useEffect, useRef } from 'react';
-// import { FitAddon } from '@xterm/addon-fit';
+import { FitAddon } from '@xterm/addon-fit';
 import { AttachAddon } from "@xterm/addon-attach";
 
-// const fitAddon = new FitAddon();
+const fitAddon = new FitAddon();
 
-export default function Terminal({ tag, container, previewStatus }: { tag: string | undefined, container: boolean, previewStatus: boolean}) {
+export default function Terminal({ tag, container, previewStatus }: { tag: string | undefined, container: boolean, previewStatus: boolean }) {
     const terminalRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -32,28 +32,9 @@ export default function Terminal({ tag, container, previewStatus }: { tag: strin
         const attachAddon = new AttachAddon(socket);
 
         term.loadAddon(attachAddon);
-        // term.loadAddon(fitAddon);
+        term.loadAddon(fitAddon);
         term.open(terminalRef.current);
-        // fitAddon.fit();
-
-        // const handleData = (data: string) => {
-        //     console.log(data)
-        //     // Check if the command is a file manipulation command
-        //     const fileManipulationCommands = ['mv', 'cp', 'rm', 'mkdir', 'touch']; // Add more if needed
-        //     const command = data.trim().split(' ')[0]; // Get the first word as the command
-        //     if (fileManipulationCommands.includes(command)) {
-        //         refreshDirectory(); // Call the refreshDirectory function
-        //     }
-        // };
-
-        // term.onData((data) => {
-        //     currentLine += data;
-        //     if (data === '\r') {
-        //         handleData(currentLine);
-        //         currentLine = "";
-        //     }
-
-        // })
+        fitAddon.fit();
 
         return () => {
             term.dispose();
@@ -63,7 +44,7 @@ export default function Terminal({ tag, container, previewStatus }: { tag: strin
 
 
     return (
-        <div className='bg-black text-white' ref={terminalRef}>
+        <div className='bg-black h-36 text-white' ref={terminalRef}>
         </div>
     );
 }
