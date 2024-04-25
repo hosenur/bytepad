@@ -62,7 +62,7 @@ export default function Terminal({ tag, container, previewStatus }: { tag: strin
 
 
     return (
-        <div className='' ref={terminalRef}>
+        <div className='bg-black text-white' ref={terminalRef}>
         </div>
     );
 }
