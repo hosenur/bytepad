@@ -7,6 +7,7 @@ const fitAddon = new FitAddon();
 export default function Terminal({ tag, container, previewStatus }: { tag: string | undefined, container: boolean, previewStatus: boolean }) {
     const terminalRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
+        console.log('terminal', tag, container, previewStatus)
         if (!terminalRef || !tag || !container || !previewStatus) return;
         const term = new XTerm({
             convertEol: true,

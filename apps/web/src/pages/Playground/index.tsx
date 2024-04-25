@@ -20,6 +20,7 @@ export default function Playground() {
   }
   const [remoteFiles, setRemoteFiles] = useState<RemoteFile[]>([]);
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
+  const [openFiles, setOpenFiles] = useState<File[]>([]);
   const [containerStatus, setContainerStatus] = useState<boolean>(false);
   const [previewStatus, setPreviewStatus] = useState<boolean>(false);
   const socket = useSocket(tag);
@@ -41,6 +42,7 @@ export default function Playground() {
       toast.success("Connected to container");
     });
     socket.on("directory", (directory) => {
+      setContainerStatus(true);
       console.log("directory");
       setRemoteFiles(directory);
     });
@@ -62,6 +64,12 @@ export default function Playground() {
       });
     } else {
       socket?.emit("getFile", { path: file.path }, (data: string) => {
+        setOpenFiles((prev) => {
+          const allFiles = [...prev, file];
+          return allFiles.filter(
+            (file, index, self) => index === self.findIndex((f) => f.path === file.path)
+          );
+        });
         file.content = data;
         setSelectedFile(file);
       });
@@ -77,6 +85,17 @@ export default function Playground() {
           <FileExplorer rootDir={rootDir} selectedFile={selectedFile} onSelect={onSelect} />
         </div>
         <div className="w-6/12">
+          <div className="bg-zinc-900 font-mono text-xs gap-2 flex p-2 border border-zinc-700">
+            {openFiles.map((file) => (
+              <div key={file.path} className={
+                `px-2 py-1 rounded border border-zinc-700 cursor-pointer hover:bg-zinc-800
+                ${selectedFile?.path === file.path ? "bg-zinc-800" : ""}`
+              } onClick={() => setSelectedFile(file)
+              }>
+                <span className="text-white mx-2">{file.name}</span>
+              </div>
+            ))}
+          </div>
           <Editor
             language="javascriptreact"
             theme="vs-dark"
