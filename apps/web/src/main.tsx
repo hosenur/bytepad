@@ -9,6 +9,7 @@ import Login from './pages/Login'
 import Playground from '@/pages/Playground'
 import Playgrounds from '@/pages/Playgrounds'
 import Register from '@/pages/Register'
+import { RecoilRoot } from 'recoil'
 const router = createBrowserRouter([
   {
     element: <RootLayout />,
@@ -31,9 +32,12 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')!).render(
   // <React.StrictMode>
   <main className='font-manrope'>
+    <RecoilRoot>
 
-    <RouterProvider router={router} />
-    <Toaster />
+
+      <RouterProvider router={router} />
+      <Toaster />
+    </RecoilRoot>
   </main>
   // </React.StrictMode>,
 )

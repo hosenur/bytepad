@@ -65,7 +65,7 @@ export default function Preview({
                 <div className="w-full h-full bg-white -b-lg shadow-lg dark:bg-gray-900 overflow-hidden">
                     <iframe
                         key={reloadKey} // Use key to trigger iframe reload
-                        src={`https://${tag}.bytepad.pro`}
+                        src={`https://${tag}.bytepad.pro`}  
                         className="w-full h-full"
                         title="Preview"
                     />

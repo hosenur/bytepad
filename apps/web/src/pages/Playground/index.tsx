@@ -1,14 +1,18 @@
+import EditorComponent from "@/components/Editor";
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "@/components/ui/resizable";
 import { useSocket } from "@/hooks/useSocket";
 import { File, RemoteFile, Type, buildFileTree } from "@/lib/fsUtils";
-import Editor from "@monaco-editor/react";
 import _ from "lodash"; // Import lodash debounce
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { FileExplorer } from "./FileExplorer";
-import Header from "./Header";
 import Preview from "./Preview";
-import TerminalComponent from "./Terminal";
+import Terminal from "./Terminal";
 
 
 export default function Playground() {
@@ -32,6 +36,11 @@ export default function Playground() {
     }
     socket?.emit("saveFile", { path: selectedFile.path, content: value });
   }, 1500), [selectedFile, socket]);
+  function refreshDirectory() {
+    socket?.emit("getDirectory", "/", (data: RemoteFile[]) => {
+      setRemoteFiles(data);
+    });
+  }
 
   useEffect(() => {
     if (!socket || !tag) {
@@ -47,11 +56,14 @@ export default function Playground() {
       setRemoteFiles(directory);
     });
   }, [socket, tag]);
-
   const rootDir = useMemo(() => {
     return buildFileTree(remoteFiles);
   }, [remoteFiles]);
-  console.log(rootDir);
+  //create a useeffect hook to set open files to readme.md and package.json
+
+
+
+
   const onSelect = (file: File) => {
     if (file.type === Type.DIRECTORY) {
       socket?.emit("getDirectory", file.path, (data: RemoteFile[]) => {
@@ -64,6 +76,7 @@ export default function Playground() {
       });
     } else {
       socket?.emit("getFile", { path: file.path }, (data: string) => {
+        console.log("getFile", data);
         setOpenFiles((prev) => {
           const allFiles = [...prev, file];
           return allFiles.filter(
@@ -76,51 +89,42 @@ export default function Playground() {
     }
   };
 
+
+
   return (
-    <div className="flex flex-col overflow-hidden max-h-[100vh] max-w-[100vw]">
-      <Header tag={tag} />
-      <div className="flex h-full max-w-[100vw] overflow-hidden">
 
-        <div className="bg-zinc-900 text-zinc-500 text-sm font-semibold min-h-screen w-2/12">
+    <div className="w-full h-screen overflow-hidden">
+      <ResizablePanelGroup direction="horizontal">
+
+        <ResizablePanel defaultSize={12} className="bg-zinc-800 font-bold text-zinc-400 text-sm">
           <FileExplorer rootDir={rootDir} selectedFile={selectedFile} onSelect={onSelect} />
-        </div>
-        <div className="w-6/12">
-          <div className="bg-zinc-900 font-mono text-xs gap-2 flex p-2 border border-zinc-700">
-            {openFiles.map((file) => (
-              <div key={file.path} className={
-                `px-2 py-1 rounded border border-zinc-700 cursor-pointer hover:bg-zinc-800
-                ${selectedFile?.path === file.path ? "bg-zinc-800" : ""}`
-              } onClick={() => setSelectedFile(file)
-              }>
-                <span className="text-white mx-2">{file.name}</span>
-              </div>
-            ))}
-          </div>
-          <Editor
-            language="javascriptreact"
-            theme="vs-dark"
-            height={"70vh"}
-            onChange={(value) => {
-              if (!value) return;
-              // Call the debounced function
-              debouncedSaveFile(value);
-            }}
-            value={selectedFile?.content}
-          />
-          <div className="text-white h-full w-full border border-zinc-800">
+        </ResizablePanel>
 
-            <TerminalComponent
-              previewStatus={previewStatus}
-              container={containerStatus} tag={tag} />
-          </div>
-        </div>
-        <div className="w-4/12">
-          <Preview
-            setPreviewStatus={setPreviewStatus}
-            previewStatus={previewStatus}
-            tag={tag} />
-        </div>
-      </div>
+        <ResizableHandle withHandle />
+
+        <ResizablePanel>
+          <ResizablePanelGroup direction="vertical">
+            <ResizablePanel defaultSize={70}>
+              <EditorComponent
+                setOpenFiles={setOpenFiles}
+                openFiles={openFiles}
+              />
+            </ResizablePanel>
+            <ResizableHandle withHandle />
+            <ResizablePanel defaultSize={30}>
+              <Terminal tag={tag} container={containerStatus} previewStatus={previewStatus} />
+            </ResizablePanel>
+          </ResizablePanelGroup>
+        </ResizablePanel>
+
+        <ResizableHandle withHandle />
+
+        <ResizablePanel defaultSize={30}>
+          <Preview setPreviewStatus={setPreviewStatus} previewStatus={previewStatus} tag={tag} />
+        </ResizablePanel>
+
+      </ResizablePanelGroup>
+
     </div>
   );
 }
