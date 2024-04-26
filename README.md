@@ -1,5 +1,8 @@
 # Bytepad
 
+## Updates
+![Demo](./demo.gif)
+
 ## Important Implementation Details :
 - Everything is executed inside a docker container, which creates and isolated sandbox environment for projects.
 - No arbitrary / user entered command is ran on the host machine.
