@@ -1,11 +1,12 @@
 import { File } from "@/lib/fsUtils";
 import { Editor } from "@monaco-editor/react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Mosaic } from "react-mosaic-component";
 import { MosaicKey, MosaicNode } from "react-mosaic-component/lib/types";
 import "react-mosaic-component/react-mosaic-component.css";
 import { Socket } from "socket.io-client";
 import Window from "./Window";
+import _ from "lodash"; // Import lodash debounce
 
 type EditorComponentProps = {
     openFiles: File[],
@@ -105,6 +106,12 @@ export default function EditorComponent({
 
 
     }, [openFiles])
+    const debouncedSaveFile = useMemo(() => _.debounce((value: string) => {
+        if (!openFiles[0]) {
+            return;
+        }
+        socket?.emit("saveFile", { path: openFiles[0].path, content: value });
+    }, 1500), [openFiles[0], socket]);
     if (openFiles.length === 0) {
         return <div className="w-full h-full flex items-center justify-center">
             <p>Open Up A File To Start Editing</p>
@@ -112,7 +119,11 @@ export default function EditorComponent({
     }
     if (openFiles.length === 1) {
         return (
-            <Editor theme="vs-dark" height="100%" defaultLanguage="javascript" defaultValue={openFiles[0].content} />
+            <Editor
+                onChange={(value) => {
+                    debouncedSaveFile(value!);
+                }}
+                theme="vs-dark" height="100%" defaultLanguage="javascript" defaultValue={openFiles[0].content} />
         )
     }
     return (
