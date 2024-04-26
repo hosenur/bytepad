@@ -102,6 +102,7 @@ export default function Playground() {
         <ResizablePanel defaultSize={70}>
           <div className="h-[80vh]">
             <EditorComponent
+              socket={socket}
               setOpenFiles={setOpenFiles}
               openFiles={openFiles}
             />

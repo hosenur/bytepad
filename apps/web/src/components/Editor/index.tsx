@@ -1,19 +1,22 @@
 import { File } from "@/lib/fsUtils";
 import { Editor } from "@monaco-editor/react";
-import { Mosaic, MosaicBranch } from "react-mosaic-component";
-import "react-mosaic-component/react-mosaic-component.css";
-import Window from "./Window";
 import { useEffect, useState } from "react";
+import { Mosaic } from "react-mosaic-component";
 import { MosaicKey, MosaicNode } from "react-mosaic-component/lib/types";
+import "react-mosaic-component/react-mosaic-component.css";
+import { Socket } from "socket.io-client";
+import Window from "./Window";
 
 type EditorComponentProps = {
     openFiles: File[],
     setOpenFiles: (files: File[]) => void;
+    socket: Socket | undefined;
 }
 
 export default function EditorComponent({
     openFiles,
-    setOpenFiles
+    setOpenFiles,
+    socket
 }: EditorComponentProps) {
     const closeFile = (id: string) => {
         setOpenFiles(openFiles.filter(file => file.id !== id));
@@ -117,6 +120,7 @@ export default function EditorComponent({
 
             renderTile={(id, path) => (
                 <Window
+                    socket={socket}
                     closeFile={closeFile}
                     file={openFiles.find(file => file.id === id)}
                     path={path} />
