@@ -1,8 +1,10 @@
 import { File } from "@/lib/fsUtils";
 import { Editor } from "@monaco-editor/react";
-import { Mosaic } from "react-mosaic-component";
+import { Mosaic, MosaicBranch } from "react-mosaic-component";
 import "react-mosaic-component/react-mosaic-component.css";
 import Window from "./Window";
+import { useEffect, useState } from "react";
+import { MosaicKey, MosaicNode } from "react-mosaic-component/lib/types";
 
 type EditorComponentProps = {
     openFiles: File[],
@@ -11,11 +13,95 @@ type EditorComponentProps = {
 
 export default function EditorComponent({
     openFiles,
-    // setOpenFiles
+    setOpenFiles
 }: EditorComponentProps) {
-    // const closeFile = (id: string) => {
-    //     setOpenFiles(openFiles.filter(file => file.id !== id));
-    // }
+    const closeFile = (id: string) => {
+        setOpenFiles(openFiles.filter(file => file.id !== id));
+    }
+    const [layout, setLayout] = useState<MosaicNode<MosaicKey> | null>()
+    useEffect(() => {
+        if (openFiles.length < 2) return;
+        if (openFiles.length == 2) {
+            setLayout({
+                direction: "column",
+                first: openFiles[0].id,
+                second: openFiles[1].id,
+            })
+        }
+        if (openFiles.length === 3) {
+            setLayout({
+                direction: "column",
+                first: openFiles[0].id,
+                second: {
+                    direction: "row",
+                    first: openFiles[1].id,
+                    second: openFiles[2].id
+                }
+            })
+        }
+        if (openFiles.length === 4) {
+            setLayout({
+                direction: "column",
+                first: {
+                    direction: "row",
+                    first: openFiles[0].id,
+                    second: openFiles[1].id,
+                },
+                second: {
+                    direction: "row",
+                    first: openFiles[2].id,
+                    second: openFiles[3].id,
+                }
+            })
+        }
+        if (openFiles.length === 5) {
+            setLayout({
+                direction: "column",
+                first: {
+                    direction: "row",
+                    first: openFiles[0].id,
+                    second: openFiles[1].id,
+                },
+                second: {
+                    direction: "row",
+                    first: openFiles[2].id,
+                    second: {
+                        direction: "column",
+                        first: openFiles[3].id,
+                        second: openFiles[4].id
+                    }
+                }
+            })
+        }
+        if (openFiles.length === 6) {
+            setLayout({
+                direction: "column",
+                first: {
+                    direction: "row",
+                    first: openFiles[0].id,
+                    second: openFiles[1].id,
+                },
+                second: {
+                    direction: "row",
+                    first: openFiles[2].id,
+                    second: {
+                        direction: "column",
+                        first: openFiles[3].id,
+                        second: {
+                            direction: "row",
+                            first: openFiles[4].id,
+                            second: openFiles[5].id
+                        }
+                    }
+                }
+
+            })
+        }
+
+
+
+
+    }, [openFiles])
     if (openFiles.length === 0) {
         return <div className="w-full h-full flex items-center justify-center">
             <p>Open Up A File To Start Editing</p>
@@ -31,15 +117,14 @@ export default function EditorComponent({
 
             renderTile={(id, path) => (
                 <Window
+                    closeFile={closeFile}
                     file={openFiles.find(file => file.id === id)}
-                    // id={id}
                     path={path} />
             )}
-            initialValue={{
+            initialValue={layout || {
                 direction: "row",
-                first: openFiles[0]?.id,
-                second: openFiles[1]?.id,
-
+                first: openFiles[0].id,
+                second: openFiles[1].id,
             }}
         />
     )
